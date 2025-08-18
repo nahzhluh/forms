@@ -1,6 +1,7 @@
 import testData from '../test-data.json';
 import { storageService } from '../storage/localStorage';
 import { Project, Entry, MediaItem, StorageData } from '../types';
+import { generateTestImage } from './generatePlaceholderImage';
 
 export const loadTestData = () => {
   try {
@@ -36,7 +37,7 @@ export const loadTestData = () => {
             fileName: mediaData.filename,
             fileSize: mediaData.fileSize || 0,
             mimeType: mediaData.type,
-            dataUrl: mediaData.url,
+            dataUrl: generateTestImage(mediaData.filename),
             createdAt: mediaData.uploadedAt,
           });
         });

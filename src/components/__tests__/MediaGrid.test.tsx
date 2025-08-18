@@ -61,4 +61,33 @@ describe('MediaGrid', () => {
     // Modal should be closed
     expect(screen.queryByText('×')).not.toBeInTheDocument();
   });
+
+  it('shows error state when image fails to load', () => {
+    render(<MediaGrid media={mockMedia} />);
+    
+    const firstImage = screen.getAllByAltText('test1.jpg')[0];
+    
+    // Simulate image load error
+    fireEvent.error(firstImage);
+    
+    // Should show error state
+    expect(screen.getByText('Image unavailable')).toBeInTheDocument();
+    expect(screen.getByText('📷')).toBeInTheDocument();
+  });
+
+  it('does not open modal when clicking on error state image', () => {
+    render(<MediaGrid media={mockMedia} />);
+    
+    const firstImage = screen.getAllByAltText('test1.jpg')[0];
+    
+    // Simulate image load error
+    fireEvent.error(firstImage);
+    
+    // Click on the error state
+    const errorContainer = screen.getByText('Image unavailable').closest('div');
+    fireEvent.click(errorContainer!);
+    
+    // Modal should not be open
+    expect(screen.queryByText('×')).not.toBeInTheDocument();
+  });
 });

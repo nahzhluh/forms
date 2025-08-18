@@ -1,19 +1,26 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Layout } from '../components/Layout';
 import { Button } from '../components/ui/Button';
 import { Textarea } from '../components/ui/Textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
 import { EntryDisplay } from '../components/EntryDisplay';
+import { DateNavigation } from '../components/DateNavigation';
 import { Project, Entry } from '../types';
 import { getTodayString, validateReflection, validateImageFile, convertFileToDataUrl, formatDate } from '../utils';
 import { storageService } from '../storage/localStorage';
+import { useEntries } from '../hooks/useEntries';
 
 interface DailyEntryProps {
   project: Project;
-  onBack: () => void;
 }
 
-export const DailyEntry: React.FC<DailyEntryProps> = ({ project, onBack }) => {
+export const DailyEntry: React.FC<DailyEntryProps> = ({ project }) => {
+  const navigate = useNavigate();
+  
+  const handleBack = () => {
+    navigate('/');
+  };
   const [reflection, setReflection] = useState('');
   const [images, setImages] = useState<File[]>([]);
   const [isSaving, setIsSaving] = useState(false);
@@ -21,6 +28,8 @@ export const DailyEntry: React.FC<DailyEntryProps> = ({ project, onBack }) => {
   const [success, setSuccess] = useState(false);
   const [existingEntry, setExistingEntry] = useState<Entry | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(getTodayString());
+  const [allEntries, setAllEntries] = useState<Entry[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const today = getTodayString();
@@ -30,15 +39,36 @@ export const DailyEntry: React.FC<DailyEntryProps> = ({ project, onBack }) => {
   const existingMediaCount = existingEntry?.media?.length || 0;
   const totalImages = existingMediaCount + images.length;
 
-  // Check for existing entry for today
+  // Function to refresh all entries
+  const refreshAllEntries = useCallback(() => {
+    const entries = storageService.getEntries(project.id);
+    const entriesWithMedia = entries.map(entry => {
+      const media = storageService.getMediaForEntry(entry.id);
+      return { ...entry, media };
+    });
+    setAllEntries(entriesWithMedia);
+  }, [project.id]);
+
+  // Load all entries for the project
   useEffect(() => {
-    const entry = storageService.getEntryByDate(project.id, today);
+    refreshAllEntries();
+  }, [refreshAllEntries]);
+
+  // Load entry for selected date
+  useEffect(() => {
+    const entry = storageService.getEntryByDate(project.id, selectedDate);
     if (entry) {
       // Load media for the entry
       const media = storageService.getMediaForEntry(entry.id);
       setExistingEntry({ ...entry, media });
+    } else {
+      setExistingEntry(null);
     }
-  }, [project.id, today]);
+    // Reset editing state when changing dates
+    setIsEditing(false);
+    setReflection('');
+    setImages([]);
+  }, [project.id, selectedDate]);
 
   // Pre-populate form when editing
   useEffect(() => {
@@ -131,7 +161,7 @@ export const DailyEntry: React.FC<DailyEntryProps> = ({ project, onBack }) => {
         // Create new entry
         const entry = storageService.saveEntry({
           projectId: project.id,
-          date: today,
+          date: selectedDate,
           reflection: reflection.trim(),
           media: [],
         });
@@ -147,8 +177,11 @@ export const DailyEntry: React.FC<DailyEntryProps> = ({ project, onBack }) => {
 
       setSuccess(true);
       
+      // Refresh all entries to update the sidebar
+      refreshAllEntries();
+      
       // Update existing entry state
-      const updatedEntry = storageService.getEntryByDate(project.id, today);
+      const updatedEntry = storageService.getEntryByDate(project.id, selectedDate);
       if (updatedEntry) {
         const media = storageService.getMediaForEntry(updatedEntry.id);
         setExistingEntry({ ...updatedEntry, media });
@@ -177,20 +210,35 @@ export const DailyEntry: React.FC<DailyEntryProps> = ({ project, onBack }) => {
     }
   };
 
+  const handleDateSelect = (date: string) => {
+    setSelectedDate(date);
+  };
+
+  const handleTodayClick = () => {
+    setSelectedDate(getTodayString());
+  };
+
   return (
-    <Layout>
-      <div className="max-w-4xl mx-auto space-y-6">
+    <div className="min-h-screen bg-neutral-50">
+      <div className="flex">
+        {/* Sidebar Navigation */}
+        <DateNavigation
+          projectId={project.id}
+          entries={allEntries}
+          selectedDate={selectedDate}
+          onDateSelect={handleDateSelect}
+          onTodayClick={handleTodayClick}
+          onBack={handleBack}
+        />
+        
+        {/* Main Content */}
+        <div className="flex-1 p-8">
+          <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <button
-              onClick={onBack}
-              className="text-neutral-600 hover:text-neutral-900 mb-2 flex items-center"
-            >
-              ← Back to Projects
-            </button>
             <h1 className="text-3xl font-bold text-neutral-900">{project.name}</h1>
-            <p className="text-neutral-600 mt-1">Daily Entry - {formatDate(today)}</p>
+            <p className="text-neutral-600 mt-1">Daily Entry - {formatDate(selectedDate)}</p>
           </div>
           <div className="flex space-x-3">
             {isEditing && (
@@ -206,13 +254,16 @@ export const DailyEntry: React.FC<DailyEntryProps> = ({ project, onBack }) => {
                 Cancel Edit
               </Button>
             )}
-            <Button
-              onClick={handleSave}
-              disabled={isSaving || !reflection.trim()}
-              size="lg"
-            >
-              {isSaving ? 'Saving...' : isEditing ? 'Update Entry' : 'Save Entry'}
-            </Button>
+            {/* Only show save button if we're on today's date and either editing or no entry exists */}
+            {selectedDate === getTodayString() && (isEditing || !existingEntry) && (
+              <Button
+                onClick={handleSave}
+                disabled={isSaving || !reflection.trim()}
+                size="lg"
+              >
+                {isSaving ? 'Saving...' : isEditing ? 'Update Entry' : 'Save Entry'}
+              </Button>
+            )}
           </div>
         </div>
 
@@ -246,7 +297,9 @@ export const DailyEntry: React.FC<DailyEntryProps> = ({ project, onBack }) => {
             {/* Reflection Input */}
             <Card>
               <CardHeader>
-                <CardTitle>Today's Reflection</CardTitle>
+                <CardTitle>
+                  {selectedDate === getTodayString() ? 'Today\'s Reflection' : `${formatDate(selectedDate)} Reflection`}
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <Textarea
@@ -320,7 +373,9 @@ export const DailyEntry: React.FC<DailyEntryProps> = ({ project, onBack }) => {
             </Card>
           </>
         )}
+          </div>
+        </div>
       </div>
-    </Layout>
+    </div>
   );
 };

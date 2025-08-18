@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Layout } from '../components/Layout';
 import { ProjectCard } from '../components/ProjectCard';
 import { CreateProjectModal } from '../components/CreateProjectModal';
-import { DailyEntry } from './DailyEntry';
 import { Button } from '../components/ui/Button';
 import { useProjects } from '../hooks/useProjects';
 import { Project } from '../types';
@@ -10,7 +10,7 @@ import { loadTestData } from '../utils/loadTestData';
 
 export const ProjectDashboard: React.FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const navigate = useNavigate();
   const { projects, isLoading, error, createProject, refreshProjects, deleteProject } = useProjects();
 
 
@@ -18,7 +18,7 @@ export const ProjectDashboard: React.FC = () => {
     try {
       const newProject = await createProject(name);
       // Immediately navigate to the new project's daily entry view
-      setSelectedProject(newProject);
+      navigate(`/project/${newProject.id}`);
       // Ensure modal is closed
       setIsCreateModalOpen(false);
     } catch (err) {
@@ -28,11 +28,8 @@ export const ProjectDashboard: React.FC = () => {
   };
 
   const handleProjectClick = (project: Project) => {
-    setSelectedProject(project);
-  };
-
-  const handleBackToProjects = () => {
-    setSelectedProject(null);
+    console.log('Navigating to project:', project.id, project.name);
+    navigate(`/project/${project.id}`);
   };
 
   const handleLoadTestData = () => {
@@ -78,13 +75,14 @@ export const ProjectDashboard: React.FC = () => {
     if (projects.length === 0) {
       return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="rounded-xl border border-neutral-200 bg-white text-neutral-950 shadow-sm hover:shadow-md transition-shadow cursor-pointer border-dashed border-neutral-300">
+          <div 
+            className="rounded-xl border border-neutral-200 bg-white text-neutral-950 shadow-sm hover:shadow-md transition-shadow cursor-pointer border-dashed border-neutral-300"
+            onClick={() => setIsCreateModalOpen(true)}
+          >
             <div className="flex items-center justify-center h-32">
               <div className="text-center">
                 <p className="text-neutral-500 text-sm">No projects yet</p>
-                <Button variant="ghost" size="sm" className="mt-2" onClick={() => setIsCreateModalOpen(true)}>
-                  + Create your first project
-                </Button>
+                <p className="text-neutral-400 text-sm mt-2">+ Create your first project</p>
               </div>
             </div>
           </div>
@@ -121,16 +119,6 @@ export const ProjectDashboard: React.FC = () => {
       </div>
     );
   };
-
-  // Show DailyEntry if a project is selected
-  if (selectedProject) {
-    return (
-      <DailyEntry
-        project={selectedProject}
-        onBack={handleBackToProjects}
-      />
-    );
-  }
 
   return (
     <Layout>

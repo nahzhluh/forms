@@ -12,11 +12,11 @@ jest.mock('../../storage/localStorage', () => ({
     saveEntry: jest.fn(),
     updateEntry: jest.fn(),
     saveMediaItem: jest.fn(),
+    getEntries: jest.fn(),
   },
 }));
 
 describe('DailyEntry', () => {
-  const mockOnBack = jest.fn();
   const mockProject: Project = {
     id: 'test-project-id',
     name: 'Test Project',
@@ -30,6 +30,10 @@ describe('DailyEntry', () => {
     // Mock URL.createObjectURL for file previews
     global.URL.createObjectURL = jest.fn(() => 'mock-url');
     global.URL.revokeObjectURL = jest.fn();
+    
+    // Mock storage service methods
+    const { storageService } = require('../../storage/localStorage');
+    storageService.getEntries.mockReturnValue([]);
   });
 
   describe('Image upload limits', () => {
@@ -55,7 +59,7 @@ describe('DailyEntry', () => {
       storageService.getEntryByDate.mockReturnValue(existingEntry);
       storageService.getMediaForEntry.mockReturnValue(existingEntry.media);
 
-      render(<DailyEntry project={mockProject} onBack={mockOnBack} />);
+      render(<DailyEntry project={mockProject} />);
 
       // Wait for the component to load the existing entry
       await waitFor(() => {
