@@ -1,9 +1,96 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Layout } from '../components/Layout';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui';
-import { Button } from '../components/ui';
+import { ProjectCard } from '../components/ProjectCard';
+import { CreateProjectModal } from '../components/CreateProjectModal';
+import { Button } from '../components/ui/Button';
+import { useProjects } from '../hooks/useProjects';
+import { Project } from '../types';
 
 export const ProjectDashboard: React.FC = () => {
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const { projects, isLoading, error, createProject } = useProjects();
+
+  const handleCreateProject = async (name: string) => {
+    try {
+      await createProject(name);
+      // Modal will close automatically after successful creation
+    } catch (err) {
+      // Error is handled by the hook and displayed in the UI
+      console.error('Failed to create project:', err);
+    }
+  };
+
+  const handleProjectClick = (project: Project) => {
+    // TODO: Navigate to project detail/entry view
+    console.log('Navigate to project:', project.id);
+  };
+
+  const renderProjects = () => {
+    if (isLoading) {
+      return (
+        <div className="flex items-center justify-center h-32">
+          <div className="text-neutral-500">Loading projects...</div>
+        </div>
+      );
+    }
+
+    if (error) {
+      return (
+        <div className="flex items-center justify-center h-32">
+          <div className="text-red-500 text-center">
+            <p>Error loading projects</p>
+            <p className="text-sm">{error}</p>
+          </div>
+        </div>
+      );
+    }
+
+    if (projects.length === 0) {
+      return (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="rounded-xl border border-neutral-200 bg-white text-neutral-950 shadow-sm hover:shadow-md transition-shadow cursor-pointer border-dashed border-neutral-300">
+            <div className="flex items-center justify-center h-32">
+              <div className="text-center">
+                <p className="text-neutral-500 text-sm">No projects yet</p>
+                <Button variant="ghost" size="sm" className="mt-2" onClick={() => setIsCreateModalOpen(true)}>
+                  + Create your first project
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {projects
+          .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+          .map((project) => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              onClick={handleProjectClick}
+            />
+          ))}
+        
+        {/* Add new project card - only show when there are no projects */}
+        {projects.length === 0 && (
+          <div className="rounded-xl border border-neutral-200 bg-white text-neutral-950 shadow-sm hover:shadow-md transition-shadow cursor-pointer border-dashed border-neutral-300">
+            <div className="flex items-center justify-center h-32">
+              <div className="text-center">
+                <p className="text-neutral-500 text-sm">Start a new project</p>
+                <Button variant="ghost" size="sm" className="mt-2" onClick={() => setIsCreateModalOpen(true)}>
+                  + Create Project
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   return (
     <Layout>
       <div className="space-y-6">
@@ -14,34 +101,18 @@ export const ProjectDashboard: React.FC = () => {
               Document your creative process and track your learning journey
             </p>
           </div>
-          <Button size="lg">
+          <Button size="lg" onClick={() => setIsCreateModalOpen(true)}>
             + New Project
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Card className="hover:shadow-md transition-shadow cursor-pointer">
-            <CardHeader>
-              <CardTitle>Sample Project</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-neutral-600">
-                This is a sample project to test the layout and components.
-              </p>
-            </CardContent>
-          </Card>
+        {renderProjects()}
 
-          <Card className="hover:shadow-md transition-shadow cursor-pointer border-dashed border-neutral-300">
-            <CardContent className="flex items-center justify-center h-32">
-              <div className="text-center">
-                <p className="text-neutral-500 text-sm">Start a new project</p>
-                <Button variant="ghost" size="sm" className="mt-2">
-                  + Create Project
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        <CreateProjectModal
+          isOpen={isCreateModalOpen}
+          onClose={() => setIsCreateModalOpen(false)}
+          onCreateProject={handleCreateProject}
+        />
       </div>
     </Layout>
   );
