@@ -2,18 +2,25 @@ import React, { useState } from 'react';
 import { Layout } from '../components/Layout';
 import { ProjectCard } from '../components/ProjectCard';
 import { CreateProjectModal } from '../components/CreateProjectModal';
+import { DailyEntry } from './DailyEntry';
 import { Button } from '../components/ui/Button';
 import { useProjects } from '../hooks/useProjects';
 import { Project } from '../types';
+import { loadTestData } from '../utils/loadTestData';
 
 export const ProjectDashboard: React.FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const { projects, isLoading, error, createProject } = useProjects();
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const { projects, isLoading, error, createProject, refreshProjects, deleteProject } = useProjects();
+
 
   const handleCreateProject = async (name: string) => {
     try {
-      await createProject(name);
-      // Modal will close automatically after successful creation
+      const newProject = await createProject(name);
+      // Immediately navigate to the new project's daily entry view
+      setSelectedProject(newProject);
+      // Ensure modal is closed
+      setIsCreateModalOpen(false);
     } catch (err) {
       // Error is handled by the hook and displayed in the UI
       console.error('Failed to create project:', err);
@@ -21,8 +28,31 @@ export const ProjectDashboard: React.FC = () => {
   };
 
   const handleProjectClick = (project: Project) => {
-    // TODO: Navigate to project detail/entry view
-    console.log('Navigate to project:', project.id);
+    setSelectedProject(project);
+  };
+
+  const handleBackToProjects = () => {
+    setSelectedProject(null);
+  };
+
+  const handleLoadTestData = () => {
+    console.log('Loading test data...');
+    const success = loadTestData();
+    console.log('Test data load result:', success);
+    if (success) {
+      refreshProjects();
+    }
+  };
+
+  const handleDeleteProject = async (projectId: string) => {
+    if (window.confirm('Are you sure you want to delete this project? This action cannot be undone.')) {
+      try {
+        await deleteProject(projectId);
+        console.log('Project deleted successfully');
+      } catch (err) {
+        console.error('Failed to delete project:', err);
+      }
+    }
   };
 
   const renderProjects = () => {
@@ -71,6 +101,7 @@ export const ProjectDashboard: React.FC = () => {
               key={project.id}
               project={project}
               onClick={handleProjectClick}
+              onDelete={handleDeleteProject}
             />
           ))}
         
@@ -91,6 +122,16 @@ export const ProjectDashboard: React.FC = () => {
     );
   };
 
+  // Show DailyEntry if a project is selected
+  if (selectedProject) {
+    return (
+      <DailyEntry
+        project={selectedProject}
+        onBack={handleBackToProjects}
+      />
+    );
+  }
+
   return (
     <Layout>
       <div className="space-y-6">
@@ -101,9 +142,18 @@ export const ProjectDashboard: React.FC = () => {
               Document your creative process and track your learning journey
             </p>
           </div>
-          <Button size="lg" onClick={() => setIsCreateModalOpen(true)}>
-            + New Project
-          </Button>
+          <div className="flex space-x-3">
+            <Button 
+              variant="outline" 
+              size="lg" 
+              onClick={handleLoadTestData}
+            >
+              Load Test Data
+            </Button>
+            <Button size="lg" onClick={() => setIsCreateModalOpen(true)}>
+              + New Project
+            </Button>
+          </div>
         </div>
 
         {renderProjects()}

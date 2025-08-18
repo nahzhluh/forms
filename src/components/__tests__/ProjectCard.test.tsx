@@ -29,6 +29,32 @@ describe('ProjectCard', () => {
     expect(mockOnClick).toHaveBeenCalledWith(mockProject);
   });
 
+  it('shows delete button when onDelete prop is provided', () => {
+    const mockOnClick = jest.fn();
+    const mockOnDelete = jest.fn();
+    render(<ProjectCard project={mockProject} onClick={mockOnClick} onDelete={mockOnDelete} />);
+
+    expect(screen.getByText('🗑️')).toBeInTheDocument();
+  });
+
+  it('calls onDelete when delete button is clicked', () => {
+    const mockOnClick = jest.fn();
+    const mockOnDelete = jest.fn();
+    render(<ProjectCard project={mockProject} onClick={mockOnClick} onDelete={mockOnDelete} />);
+
+    fireEvent.click(screen.getByText('🗑️'));
+    expect(mockOnDelete).toHaveBeenCalledWith(mockProject.id);
+  });
+
+  it('does not trigger onClick when delete button is clicked', () => {
+    const mockOnClick = jest.fn();
+    const mockOnDelete = jest.fn();
+    render(<ProjectCard project={mockProject} onClick={mockOnClick} onDelete={mockOnDelete} />);
+
+    fireEvent.click(screen.getByText('🗑️'));
+    expect(mockOnClick).not.toHaveBeenCalled();
+  });
+
   it('shows archived status for inactive projects', () => {
     const archivedProject = { ...mockProject, isActive: false };
     const mockOnClick = jest.fn();

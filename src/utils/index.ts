@@ -2,7 +2,21 @@
 
 // Date utilities
 export const formatDate = (date: string | Date): string => {
-  const d = typeof date === 'string' ? new Date(date) : date;
+  let d: Date;
+  
+  if (typeof date === 'string') {
+    if (date.includes('T')) {
+      // Handle ISO timestamp format (e.g., "2023-01-01T00:00:00.000Z")
+      d = new Date(date);
+    } else {
+      // Handle YYYY-MM-DD format properly
+      const [year, month, day] = date.split('-').map(Number);
+      d = new Date(year, month - 1, day); // month is 0-indexed
+    }
+  } else {
+    d = date;
+  }
+  
   return d.toLocaleDateString('en-US', {
     weekday: 'long',
     year: 'numeric',
@@ -20,7 +34,11 @@ export const formatDateShort = (date: string | Date): string => {
 };
 
 export const getTodayString = (): string => {
-  return new Date().toISOString().split('T')[0];
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 };
 
 export const isValidDate = (dateString: string): boolean => {
