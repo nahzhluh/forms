@@ -1,0 +1,192 @@
+# Cursor Rules for Forms - Process Documentation Platform
+
+## Project Context
+Forms is a process-focused documentation platform for makers and creators. The MVP enables individual users to document their creative projects through daily reflections and media capture, emphasizing experimentation and learning over polished results.
+
+## Code Style & Architecture
+
+### General Principles
+- Prioritize simplicity and readability over cleverness
+- Focus on user experience and low cognitive load
+- Maintain journal-like, authentic documentation feel
+- Design for web-first responsive experience
+- Build with scalability and extensibility in mind from the start
+
+### Frontend Development
+- Use modern React with TypeScript for type safety
+- Implement web-first responsive design with CSS Grid/Flexbox
+- Follow accessibility best practices (WCAG 2.1 AA)
+- Use semantic HTML elements for better screen reader support
+- Implement progressive enhancement
+- Optimize for desktop and tablet experiences, then adapt for mobile
+- Design component architecture for reusability and extensibility
+- Implement state management patterns that scale with feature complexity
+
+### Design System
+- **Recommended: Radix UI + Tailwind CSS** for MVP
+  - Radix UI provides accessible, unstyled components
+  - Tailwind CSS enables rapid, consistent styling
+  - Perfect for journal-like, minimal aesthetic
+  - Easy to customize and extend
+- **Alternative: Chakra UI** if you prefer more opinionated components
+  - Excellent accessibility out of the box
+  - Built-in responsive design
+  - Good for rapid prototyping
+- **Custom Design System** for long-term scalability
+  - Build on top of Radix UI primitives
+  - Create consistent design tokens
+  - Document component usage and variants
+
+### Backend Development
+- Use browser localStorage for MVP data persistence
+- Implement client-side data management patterns with abstraction layers
+- Handle localStorage limitations (size, synchronous operations)
+- Design data models and APIs to support future server-side migration
+- Plan for future migration to server-side database
+- Consider IndexedDB for larger media storage needs
+- Implement modular service architecture for easy feature additions
+
+## File Organization
+
+### Frontend Structure
+```
+src/
+├── components/     # Reusable UI components
+├── pages/         # Page-level components
+├── hooks/         # Custom React hooks
+├── utils/         # Utility functions
+├── types/         # TypeScript type definitions
+├── styles/        # CSS/SCSS files
+└── assets/        # Static assets
+```
+
+### Backend Structure (MVP)
+```
+src/
+├── services/      # Data management services
+├── storage/       # localStorage utilities
+├── utils/         # Utility functions
+└── types/         # Data type definitions
+```
+
+### Backend Structure (Future)
+```
+server/
+├── routes/        # API route handlers
+├── models/        # Database models
+├── middleware/    # Express middleware
+├── utils/         # Utility functions
+└── config/        # Configuration files
+```
+
+## Coding Standards
+
+### JavaScript/TypeScript
+- Use meaningful variable and function names
+- Prefer const over let, avoid var
+- Use async/await over Promises
+- Implement proper error boundaries in React
+- Add JSDoc comments for complex functions
+
+### CSS/SCSS
+- Use BEM methodology for class naming
+- Implement CSS custom properties for theming
+- Ensure responsive breakpoints are consistent
+- Optimize for performance with minimal CSS
+
+### Database
+- Use descriptive table and column names
+- Implement proper indexing for performance
+- Plan for data migration strategies
+- Include created_at/updated_at timestamps
+
+## Feature Implementation Guidelines
+
+### Project Management
+- Keep project creation simple (name only)
+- Implement auto-save functionality
+- Use optimistic UI updates where appropriate
+
+### Media Handling
+- Support multiple image formats (JPEG, PNG, WebP)
+- Implement image compression and optimization
+- Plan for video support in future iterations
+- Use proper alt text for accessibility
+
+### User Experience
+- Implement loading states for all async operations
+- Provide clear error messages
+- Use gentle animations for state transitions
+- Ensure keyboard navigation support
+
+## Testing Strategy
+- Write unit tests for utility functions
+- Implement integration tests for localStorage operations
+- Use React Testing Library for component tests
+- Write end-to-end experience tests covering core user journeys:
+  - Project creation and navigation
+  - Daily entry creation with media upload
+  - Timeline navigation and past entry viewing
+  - Data persistence across browser sessions
+- Test responsive design across different screen sizes (desktop, tablet, mobile)
+- Prioritize desktop and tablet testing for MVP
+
+## Performance Considerations
+- Optimize image loading and display
+- Implement lazy loading for past entries
+- Use React.memo for expensive components
+- Minimize bundle size with code splitting
+
+## Security Guidelines
+- Validate all user inputs
+- Implement proper authentication (future)
+- Sanitize user-generated content
+- Use HTTPS for all communications
+
+## Documentation
+- Maintain README with setup instructions
+- Document API endpoints
+- Include component usage examples
+- Keep changelog updated
+
+## Development Workflow
+- Use Git for version control with frequent commits
+- Write descriptive commit messages that explain the "why" not just the "what"
+- Use feature branches for development
+- Commit early and often - don't wait for perfect code
+- Review code before merging
+- Test on multiple devices/browsers (prioritize desktop browsers for MVP)
+
+## Future Considerations
+
+### Community Features (Post-MVP)
+- Digital studios around shared prompts
+- Knowledge exchange between users
+- Collaborative learning experiences
+- User profiles and project sharing
+
+### AI Enhancement (Post-MVP)
+- Automated narrative generation from daily logs
+- Pattern recognition in user's creative process
+- Intelligent reflection prompts based on project type
+- Content analysis and insights
+
+### Advanced Documentation (Post-MVP)
+- Voice memo integration
+- Time-lapse creation from photos
+- Process insight analytics
+- Advanced media handling (video, 3D models)
+
+### Scalability Planning
+- Design for multi-user architecture from the start
+- Plan for cloud storage and CDN integration
+- Consider microservices architecture for future growth
+- Implement proper authentication and authorization systems
+- Design for horizontal scaling of backend services
+
+### Extensibility Guidelines
+- Use plugin/extension architecture where possible
+- Implement webhook systems for third-party integrations
+- Design APIs with versioning in mind
+- Create abstraction layers for easy feature additions
+- Maintain backward compatibility for user data

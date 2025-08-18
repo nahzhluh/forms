@@ -1,0 +1,434 @@
+## Product Overview
+
+Forms is a process-focused documentation platform for makers and creators. The MVP enables individual users to document their creative projects through daily reflections and media capture, emphasizing experimentation and learning over polished results.
+
+## Vision Statement
+
+Reduce the cognitive load of creative documentation so that makers can focus on what matters most: creating. By streamlining the reflection and logging process, Forms enables authentic documentation of learning and experimentation without the burden of complex interfaces or social media performance pressure.
+
+## Success Metrics
+
+### Primary
+
+- **Daily active documentation**: Users logging entries at least 3 days per week
+- **Project persistence**: Average project duration of 2+ weeks
+- **Reflection depth**: Average reflection length of 100+ words
+
+### Secondary
+
+- User retention: 60% of users return within 7 days
+- Media engagement: 80% of entries include at least one media file
+- Project completion: Users mark projects as "complete" or continue logging for 30+ days
+
+## User Stories
+
+### Core User Journey
+
+**As a maker**, I want to document my creative process over time so that I can reflect on my learning and track my experimentation.
+
+### Specific User Stories
+
+**Project Creation**
+
+- As a user, I can create a new project with just a name so that I can start documenting immediately without planning pressure
+- As a user, I can see all my active projects on a simple dashboard so that I can easily navigate between them
+
+**Daily Documentation**
+
+- As a user, I can add a daily entry with media and reflection so that I can capture both visual progress and my thinking
+- As a user, I am guided by reflection prompts so that I document challenges, discoveries, and process insights rather than just results
+- As a user, I can upload multiple photos/videos per day so that I can show different aspects of my work
+
+**Historical View**
+
+- As a user, I can view past entries in chronological order so that I can see my project's evolution over time
+- As a user, I can easily navigate between days so that I can reference previous work and reflections
+- As a user, I can see both media and reflection content for past days so that I have a complete record of my process
+
+## Feature Requirements
+
+## **Core MVP Features:**
+
+- Project creation (name only)
+- Project dashboard (simple list of projects)
+- Daily entry creation with single image + text
+- Users save entries via button when done
+- Basic date navigation
+- Past entry viewing (read-only)
+
+### 1. Project Management
+
+**Create Project**
+
+- Single field: "Project Name"
+- No additional setup required
+- Immediately navigates to daily logging interface
+- Projects are saved with save button and appear on user dashboard (auto-save post mvp)
+
+**Project Dashboard**
+
+- Grid view of active projects
+- Shows project name (thumbnail from most recent media post mvp)
+- "+" button to create new project
+- Click project to enter daily logging view
+
+### 2. Daily Documentation Interface
+
+**Entry Creation**
+
+- Date automatically set to current day
+- Single text field for reflection with guided placeholder text:
+    - "What did you work on today?"
+    - "What surprised you or challenged you?"
+    - "What are you curious about or want to try next?"
+- Media upload supporting images (videos coming post mvp)
+- One image per entry (multiple media post mvp)
+- Auto-save functionality
+
+**Guided Reflection**
+
+- Placeholder text provides gentle prompts without rigid structure
+- Users can write naturally, touching on suggested aspects
+- No character limits or requirements
+- Focus on process, experimentation, and learning
+
+### 3. Historical View & Navigation
+
+**Timeline Navigation**
+
+- Left sidebar showing chronological list of entry dates
+- Current day highlighted
+- Easy click navigation between days
+- Clear visual distinction between days with/without entries
+
+**Past Entry Display**
+
+- Full media display (photos/videos)
+- Complete reflection text
+- Date clearly labeled
+- Consistent layout with current day entry
+- Read-only view of past content
+
+**Entry Management**
+
+- Read-only for past entries (Editing to come post mvp)
+- No deletion or editing of past entries (supports authentic documentation)
+- Visual consistency between current and past entries
+
+## Technical Requirements
+
+### Platform
+
+- Web application (responsive design)
+
+### Data Storage
+
+- Start with browser localStorage for immediate development, but plan for a simple backend (SQLite + basic API) since it’s needed for media uploads anyway
+
+### Performance
+
+- Fast media upload (<5 seconds for typical photo)
+- Quick navigation between entries
+- Responsive interface on mobile devices
+
+## Design Principles
+
+### Interface Design
+
+- **Minimal and focused**: Clean, distraction-free environment
+- **Journal-like feel**: More like personal documentation than social posting
+- **Process-oriented**: Visual design emphasizes reflection over results
+
+### Design Inspiration
+
+- write.as
+- are.na
+- Notion
+
+### User Experience
+
+- **Low cognitive load**: Simple, intuitive interactions
+- **Authentic documentation**: Interface encourages honest process sharing
+- **Asynchronous by design**: No real-time or social pressure elements
+- **Habit-forming**: Easy daily logging builds sustainable practice
+
+## Content Strategy
+
+### User Guidance
+
+- Reflection prompt placeholder text educates users on valuable documentation
+- Examples of effective process documentation
+- Gentle encouragement for experimentation and "failure" documentation
+
+## Future Considerations (Post-MVP)
+
+### Community Features
+
+- Digital studios around shared prompts
+- Knowledge exchange between users
+- Collaborative learning experiences
+
+### AI Enhancement
+
+- Automated narrative generation from daily logs
+- Pattern recognition in user's creative process
+- Intelligent reflection prompts based on project type
+
+### Advanced Documentation
+
+- Voice memo integration
+- Time-lapse creation from photos
+- Process insight analytics
+- Video upload support
+- Image compression and optimization
+- Search and filtering functionality
+- Enhanced browser compatibility
+- Auto-save functionality
+- Keyboard shortcuts for power users
+- Offline functionality
+- Entry editing capabilities
+
+### UX Enhancements (Post-MVP)
+
+- Data export functionality for user trust and data portability
+- Image preview before save for better upload experience
+- Save status indicators to reduce user anxiety
+- Basic onboarding flow to help users understand the concept
+- Drag-and-drop image upload interface
+- Entry titles or preview text in navigation for easier identification
+- Draft saving functionality for partial entries
+- Mobile-specific image upload (camera integration)
+- Cross-device sync capabilities
+- Project organization and archiving features
+
+## Success Criteria for MVP Launch
+
+### User Engagement
+
+- Users create first project within 24 hours of signup
+- 70% of users log second entry within 48 hours of first
+- Average session includes both media upload and reflection text
+
+### Platform Stability
+
+- 99.9% uptime
+- Sub-3 second page load times
+- Zero data loss incidents
+- Successful media upload rate >95%
+
+### User Feedback
+
+- Positive sentiment around "authentic documentation" concept
+- Users report feeling "less pressure" compared to social platforms
+- Evidence of users referencing past entries for learning
+
+This MVP establishes the foundation for authentic creative process documentation, with community features and AI enhancement planned for subsequent releases.
+
+## Development Phases for MVP
+
+### Phase 1: Foundation & Setup
+**Goal**: Establish project structure and core infrastructure
+
+#### Technical Setup
+- [x] Initialize React + TypeScript project
+- [x] Set up Radix UI + Tailwind CSS design system
+- [x] Configure localStorage utilities and data models
+- [x] Set up Git repository with initial commit structure
+- [x] Create basic project structure (components, pages, hooks, utils)
+
+#### Design Foundation
+- [x] Create basic component library (buttons, inputs, cards)
+- [x] Set up responsive grid system
+
+#### Deliverables
+- Working development environment
+- Basic component library and grid system
+- localStorage data management utilities
+- Project structure ready for feature development
+
+#### Testing Strategy
+- [x] Set up testing framework (Jest, React Testing Library)
+- [ ] Write unit tests for utility functions
+- [x] Test localStorage operations
+- [x] Verify development environment setup
+
+### Phase 2: Core Data Management
+**Goal**: Implement data persistence and basic CRUD operations
+
+#### Features
+- [ ] Project creation and storage
+- [ ] Project listing and navigation
+- [ ] Basic data validation and error handling
+- [ ] localStorage abstraction layer for future migration
+
+#### Technical Implementation
+- [ ] Define TypeScript interfaces for projects and entries
+- [ ] Implement data service layer
+- [ ] Add error boundaries and loading states
+- [ ] Set up data migration utilities
+
+#### Deliverables
+- Users can create and view projects
+- Data persists across browser sessions
+- Clean error handling and user feedback
+
+#### Testing Strategy
+- [ ] Unit tests for data service layer
+- [ ] Integration tests for project CRUD operations
+- [ ] Test data validation and error handling
+- [ ] Verify localStorage persistence across sessions
+
+### Phase 3: Daily Entry Interface
+**Goal**: Build the core daily documentation experience
+
+#### Features
+- [ ] Daily entry creation with text input
+- [ ] Image upload (single image, 5 per entry limit)
+- [ ] Manual save functionality
+- [ ] Reflection prompt integration
+- [ ] Basic form validation
+
+#### Technical Implementation
+- [ ] File upload handling with size validation
+- [ ] Image display in grid layout
+- [ ] Form state management
+- [ ] Save/load entry data
+
+#### Deliverables
+- Complete daily entry creation flow
+- Image upload and display functionality
+- Working save/load system
+
+#### Testing Strategy
+- [ ] Unit tests for entry creation and form validation
+- [ ] Integration tests for image upload functionality
+- [ ] Test save/load operations for entries
+- [ ] Verify image display in grid layout
+- [ ] Test file size and format validation
+
+### Phase 4: Historical View & Navigation
+**Goal**: Enable users to view and navigate past entries
+
+#### Features
+- [ ] Sidebar date navigation (simple list)
+- [ ] Past entry display (read-only)
+- [ ] Entry timeline view
+- [ ] Date-based filtering
+
+#### Technical Implementation
+- [ ] Date navigation component
+- [ ] Entry display components
+- [ ] Timeline data organization
+- [ ] Responsive sidebar layout
+
+#### Deliverables
+- Users can navigate between past entries
+- Complete historical view functionality
+- Responsive navigation system
+
+#### Testing Strategy
+- [ ] Unit tests for date navigation components
+- [ ] Integration tests for timeline data organization
+- [ ] Test responsive sidebar layout
+- [ ] Verify read-only entry display
+- [ ] Test date filtering and navigation
+
+### Phase 5: Polish & Testing
+**Goal**: Refine user experience and ensure quality
+
+#### UI/UX Polish
+- [ ] Define and implement color palette and typography system
+- [ ] Implement final design system
+- [ ] Add smooth transitions and animations
+- [ ] Optimize responsive design
+- [ ] Implement empty states and loading states
+- [ ] Design and implement placeholders
+
+#### Testing & Quality Assurance
+- [ ] Cross-browser testing (Chrome, Safari, Firefox)
+- [ ] End-to-end testing of core user journeys:
+  - Project creation and navigation
+  - Daily entry creation with media upload
+  - Timeline navigation and past entry viewing
+  - Data persistence across browser sessions
+- [ ] Performance optimization
+- [ ] Accessibility audit and fixes
+- [ ] Test responsive design across different screen sizes
+- [ ] Verify design system implementation
+
+#### Final Deliverables
+- [ ] Complete MVP with all core features
+- [ ] Tested across target browsers
+- [ ] Optimized performance and accessibility
+- [ ] Ready for user feedback and iteration
+
+### Success Criteria for Each Phase
+- **Phase 1**: Development environment works, design system is functional
+- **Phase 2**: Users can create and manage projects
+- **Phase 3**: Users can create daily entries with media
+- **Phase 4**: Users can view and navigate past entries
+- **Phase 5**: MVP is polished and ready for launch
+
+## Questions & Decisions Needed
+
+### UI/UX Design
+- [x] What should the color palette be? (journal-like, minimal aesthetic)
+  - **DECISION**: Journal-like, minimal aesthetic, clean but not sterile. Should encourage creativity.
+  - **Guidance**: Warm, inviting colors that feel like a personal journal or sketchbook. Avoid clinical whites and grays. Consider warm off-whites, subtle earth tones, and gentle accent colors that inspire creative thinking.
+- [x] Should we use a specific font family or stick with system fonts?
+  - **DECISION**: Pick a font family for MVP that aligns with design notes and inspiration
+  - **Guidance**: Choose a font that complements the journal-like, minimal aesthetic and creative inspiration (write.as, are.na, Notion). Should be readable and authentic-feeling.
+- [x] How should media uploads be displayed? (grid, list, carousel?)
+  - **DECISION**: Display media as a grid
+  - **Guidance**: Grid layout provides visual organization and allows users to see multiple images at once. Consider responsive grid that adapts to different screen sizes and maintains aspect ratios.
+- [x] What should the project dashboard layout be? (grid vs list view)
+  - **DECISION**: Project dashboard layout should be a grid
+  - **Guidance**: Grid layout for projects provides visual organization and allows users to see multiple projects at once.
+- [x] How should we handle empty states? (no projects, no entries)
+  - **DECISION**: Use placeholder text (e.g., "Start a project", "Start a reflection")
+  - **Guidance**: Simple, encouraging placeholder text that guides users to take action.
+
+### Technical Implementation
+- [x] Should we implement auto-save or manual save buttons?
+  - **DECISION**: Manual save buttons for MVP, auto-save in future plans
+  - **Guidance**: Start with explicit save actions for user control, plan auto-save for improved UX later.
+- [x] How should we handle media file size limits?
+  - **DECISION**: Limit media to images only for MVP, limit 5 images per entry
+  - **Guidance**: Keep MVP simple with image-only uploads and reasonable limits.
+- [x] Should we implement image compression on the client side?
+  - **DECISION**: Not needed for MVP, add to future considerations
+- [x] How should we handle browser compatibility? (which browsers to support)
+  - **DECISION**: Ensure compatibility with Chrome, Safari, Firefox for MVP
+  - **Guidance**: Focus on major browsers for MVP, expand compatibility in future.
+
+### User Experience
+- [x] Should users be able to edit past entries or keep them read-only?
+  - **DECISION**: Entries are read-only for MVP
+  - **Guidance**: Maintains authentic documentation by preserving original entries without editing.
+- [x] How should we handle date navigation? (calendar picker vs simple list)
+  - **DECISION**: Simple list in the sidebar, only show dates for which there are entries
+  - **Guidance**: Clean, minimal navigation that shows only relevant dates. See Figma mock for reference.
+- [x] Should we implement keyboard shortcuts for power users?
+  - **DECISION**: Keyboard shortcuts is a future consideration
+- [x] How should we handle offline functionality?
+  - **DECISION**: Offline functionality is a future consideration
+
+### Content & Features
+- [x] What should the default reflection prompts be?
+  - **DECISION**: "Describe what you worked on today. What worked? What frustrated you? What are you curious about?"
+  - **Guidance**: Open-ended prompt that encourages authentic reflection on process, challenges, and curiosity.
+- [x] Should we allow multiple images per entry from the start?
+  - **DECISION**: Limit to 5 images per entry for MVP
+  - **Guidance**: Reasonable limit that allows multiple perspectives while keeping MVP manageable.
+- [x] How should we handle video uploads in the future?
+  - **DECISION**: Figure out video uploads in future
+- [x] Should we implement any form of search or filtering?
+  - **DECISION**: Search and filtering is a future consideration
+
+### Future Planning
+- [x] When should we plan the transition from localStorage to server-side?
+  - **DECISION**: Transition in storage is future consideration after MVP has been validated
+- [x] How should we handle user authentication when we add it?
+  - **DECISION**: Authentication is a future consideration
+- [x] What should be the priority order for post-MVP features?
+  - **DECISION**: Priority order of post-MVP features is a future consideration
