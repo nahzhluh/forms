@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { DailyEntry } from '../DailyEntry';
 import { Project } from '../../types';
 
@@ -24,6 +25,8 @@ describe('DailyEntry', () => {
     updatedAt: '2023-12-25T10:00:00.000Z',
     isArchived: false,
   };
+
+  const mockOnBack = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -59,7 +62,11 @@ describe('DailyEntry', () => {
       storageService.getEntryByDate.mockReturnValue(existingEntry);
       storageService.getMediaForEntry.mockReturnValue(existingEntry.media);
 
-      render(<DailyEntry project={mockProject} />);
+      render(
+        <BrowserRouter>
+          <DailyEntry project={mockProject} />
+        </BrowserRouter>
+      );
 
       // Wait for the component to load the existing entry
       await waitFor(() => {
@@ -118,7 +125,11 @@ describe('DailyEntry', () => {
       storageService.getEntryByDate.mockReturnValue(existingEntry);
       storageService.getMediaForEntry.mockReturnValue(existingEntry.media);
 
-      render(<DailyEntry project={mockProject} onBack={mockOnBack} />);
+      render(
+        <BrowserRouter>
+          <DailyEntry project={mockProject} onBack={mockOnBack} />
+        </BrowserRouter>
+      );
 
       // Wait for the component to load the existing entry
       await waitFor(() => {

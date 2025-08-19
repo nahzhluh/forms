@@ -43,11 +43,10 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onDe
       <CardContent>
         <div className="space-y-2">
           <p className="text-sm text-neutral-600">
-            Created {formatDate(project.createdAt)}
+            Last updated: {formatDate(project.updatedAt)}
           </p>
-          <div className="flex items-center justify-between text-xs text-neutral-500">
-            <span>Status: {project.isActive ? 'Active' : 'Archived'}</span>
-            <span>Last updated: {formatDate(project.updatedAt)}</span>
+          <div className="text-xs text-neutral-500">
+            <span>Created: {formatDate(project.createdAt)}</span>
           </div>
         </div>
       </CardContent>

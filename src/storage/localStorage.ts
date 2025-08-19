@@ -138,6 +138,13 @@ export const storageService = {
 
     const data = this.getAllData();
     data.entries.push(newEntry);
+    
+    // Update the project's updatedAt timestamp when a new entry is created
+    const projectIndex = data.projects.findIndex(p => p.id === entry.projectId);
+    if (projectIndex !== -1) {
+      data.projects[projectIndex].updatedAt = getCurrentTimestamp();
+    }
+    
     this.saveAllData(data);
     
     return newEntry;
@@ -155,6 +162,12 @@ export const storageService = {
       updatedAt: getCurrentTimestamp(),
     };
     
+    // Update the project's updatedAt timestamp when an entry is modified
+    const projectIndex = data.projects.findIndex(p => p.id === data.entries[entryIndex].projectId);
+    if (projectIndex !== -1) {
+      data.projects[projectIndex].updatedAt = getCurrentTimestamp();
+    }
+    
     this.saveAllData(data);
     return data.entries[entryIndex];
   },
@@ -169,6 +182,16 @@ export const storageService = {
 
     const data = this.getAllData();
     data.media.push(newMediaItem);
+    
+    // Update the project's updatedAt timestamp when media is added
+    const entry = data.entries.find(e => e.id === mediaItem.entryId);
+    if (entry) {
+      const projectIndex = data.projects.findIndex(p => p.id === entry.projectId);
+      if (projectIndex !== -1) {
+        data.projects[projectIndex].updatedAt = getCurrentTimestamp();
+      }
+    }
+    
     this.saveAllData(data);
     
     return newMediaItem;
@@ -185,7 +208,18 @@ export const storageService = {
     
     if (mediaIndex === -1) return false;
     
+    const mediaItem = data.media[mediaIndex];
     data.media.splice(mediaIndex, 1);
+    
+    // Update the project's updatedAt timestamp when media is deleted
+    const entry = data.entries.find(e => e.id === mediaItem.entryId);
+    if (entry) {
+      const projectIndex = data.projects.findIndex(p => p.id === entry.projectId);
+      if (projectIndex !== -1) {
+        data.projects[projectIndex].updatedAt = getCurrentTimestamp();
+      }
+    }
+    
     this.saveAllData(data);
     return true;
   },

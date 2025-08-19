@@ -110,6 +110,14 @@ export const DateNavigation: React.FC<DateNavigationProps> = ({
           </p>
         </div>
       )}
+
+      {entries.length > 0 && uniqueDates.length === 0 && (
+        <div className="text-center py-8">
+          <p className="text-sm text-neutral-500">
+            No past entries yet
+          </p>
+        </div>
+      )}
     </div>
   );
 };
