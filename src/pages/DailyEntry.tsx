@@ -8,6 +8,9 @@ import { DateNavigation } from '../components/DateNavigation';
 import { Project, Entry } from '../types';
 import { getTodayString, validateReflection, validateImageFile, convertFileToDataUrl, formatDate } from '../utils';
 import { storageService } from '../storage/localStorage';
+import { VALIDATION, UI, MESSAGES } from '../constants';
+import { useFormState } from '../hooks/useFormState';
+import { useMediaUpload } from '../hooks/useMediaUpload';
 
 interface DailyEntryProps {
   project: Project;
@@ -20,15 +23,16 @@ export const DailyEntry: React.FC<DailyEntryProps> = ({ project }) => {
     navigate('/');
   };
   const [reflection, setReflection] = useState('');
-  const [images, setImages] = useState<File[]>([]);
-  const [isSaving, setIsSaving] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
   const [existingEntry, setExistingEntry] = useState<Entry | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [selectedDate, setSelectedDate] = useState(getTodayString());
   const [allEntries, setAllEntries] = useState<Entry[]>([]);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { isLoading: isSaving, error, success, setIsLoading: setIsSaving, showError, showSuccess, resetState } = useFormState();
+  const { images, fileInputRef, handleImageUpload, removeImage, clearImages } = useMediaUpload(
+    VALIDATION.MAX_IMAGES_PER_ENTRY,
+    existingEntry?.media?.length || 0,
+    showError
+  );
 
   const reflectionPrompt = "Describe what you worked on today. What worked? What frustrated you? What are you curious about?";
 
@@ -64,7 +68,7 @@ export const DailyEntry: React.FC<DailyEntryProps> = ({ project }) => {
     // Reset editing state when changing dates
     setIsEditing(false);
     setReflection('');
-    setImages([]);
+    clearImages();
   }, [project.id, selectedDate]);
 
   // Pre-populate form when editing
@@ -76,55 +80,16 @@ export const DailyEntry: React.FC<DailyEntryProps> = ({ project }) => {
     }
   }, [isEditing, existingEntry]);
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files || []);
-    const validFiles: File[] = [];
-    const errors: string[] = [];
-
-    // Calculate total images including files being added
-    const totalWithNewFiles = totalImages;
-
-    files.forEach(file => {
-      const validation = validateImageFile(file);
-      if (validation.isValid) {
-        if (totalWithNewFiles + validFiles.length < 5) {
-          validFiles.push(file);
-        } else {
-          errors.push(`${file.name}: Maximum 5 images allowed (${existingMediaCount} existing + ${images.length} new + ${validFiles.length} being added)`);
-        }
-      } else {
-        errors.push(`${file.name}: ${validation.error}`);
-      }
-    });
-
-    if (errors.length > 0) {
-      setError(errors.join(', '));
-      setTimeout(() => setError(''), 5000);
-    }
-
-    if (validFiles.length > 0) {
-      setImages(prev => [...prev, ...validFiles]);
-    }
-
-    // Reset file input
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
-  };
-
-  const removeImage = (index: number) => {
-    setImages(prev => prev.filter((_, i) => i !== index));
-  };
 
   const handleSave = async () => {
     try {
       setIsSaving(true);
-      setError('');
+      resetState();
 
       // Validate reflection
       const reflectionValidation = validateReflection(reflection);
       if (!reflectionValidation.isValid) {
-        setError(reflectionValidation.error || '');
+        showError(reflectionValidation.error || '');
         return;
       }
 
@@ -172,7 +137,7 @@ export const DailyEntry: React.FC<DailyEntryProps> = ({ project }) => {
         }
       }
 
-      setSuccess(true);
+      showSuccess('Entry saved successfully!');
       
       // Refresh all entries to update the sidebar
       refreshAllEntries();
@@ -186,16 +151,16 @@ export const DailyEntry: React.FC<DailyEntryProps> = ({ project }) => {
       
       // Clear form and exit edit mode
       setReflection('');
-      setImages([]);
+      clearImages();
       setIsEditing(false);
       
       // Hide success message after 3 seconds
       setTimeout(() => {
-        setSuccess(false);
+        resetState();
       }, 3000);
 
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save entry');
+      showError(err instanceof Error ? err.message : 'Failed to save entry');
     } finally {
       setIsSaving(false);
     }
@@ -244,7 +209,7 @@ export const DailyEntry: React.FC<DailyEntryProps> = ({ project }) => {
                 onClick={() => {
                   setIsEditing(false);
                   setReflection('');
-                  setImages([]);
+                  clearImages();
                 }}
                 size="lg"
               >
@@ -333,12 +298,12 @@ export const DailyEntry: React.FC<DailyEntryProps> = ({ project }) => {
                     <Button
                       variant="outline"
                       onClick={() => fileInputRef.current?.click()}
-                      disabled={totalImages >= 5}
+                      disabled={totalImages >= VALIDATION.MAX_IMAGES_PER_ENTRY}
                     >
-                      + Add Images ({totalImages}/5)
+                      + Add Images ({totalImages}/{VALIDATION.MAX_IMAGES_PER_ENTRY})
                     </Button>
                     <p className="text-sm text-neutral-500 mt-1">
-                      Upload up to 5 images (JPEG, PNG, WebP, GIF, max 5MB each)
+                      Upload up to {VALIDATION.MAX_IMAGES_PER_ENTRY} images (JPEG, PNG, WebP, GIF, max 5MB each)
                     </p>
                   </div>
 

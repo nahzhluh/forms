@@ -1,4 +1,5 @@
 // Utility functions for the Forms platform
+import { VALIDATION, SUPPORTED_IMAGE_TYPES, MESSAGES } from '../constants';
 
 // Date utilities
 export const formatDate = (date: string | Date): string => {
@@ -44,15 +45,12 @@ export const convertFileToDataUrl = (file: File): Promise<string> => {
 };
 
 export const validateImageFile = (file: File): { isValid: boolean; error?: string } => {
-  const maxSize = 5 * 1024 * 1024; // 5MB
-  const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
-
-  if (file.size > maxSize) {
-    return { isValid: false, error: 'File size must be less than 5MB' };
+  if (file.size > VALIDATION.MAX_FILE_SIZE) {
+    return { isValid: false, error: MESSAGES.FILE_SIZE_TOO_LARGE };
   }
 
-  if (!allowedTypes.includes(file.type)) {
-    return { isValid: false, error: 'Only JPEG, PNG, WebP, and GIF files are allowed' };
+  if (!SUPPORTED_IMAGE_TYPES.includes(file.type as any)) {
+    return { isValid: false, error: MESSAGES.UNSUPPORTED_FILE_TYPE };
   }
 
   return { isValid: true };
@@ -62,11 +60,11 @@ export const validateImageFile = (file: File): { isValid: boolean; error?: strin
 // Validation utilities
 export const validateProjectName = (name: string): { isValid: boolean; error?: string } => {
   if (!name.trim()) {
-    return { isValid: false, error: 'Project name is required' };
+    return { isValid: false, error: MESSAGES.PROJECT_NAME_REQUIRED };
   }
   
-  if (name.length > 100) {
-    return { isValid: false, error: 'Project name must be less than 100 characters' };
+  if (name.length > VALIDATION.PROJECT_NAME_MAX_LENGTH) {
+    return { isValid: false, error: MESSAGES.PROJECT_NAME_TOO_LONG };
   }
   
   return { isValid: true };
@@ -74,11 +72,11 @@ export const validateProjectName = (name: string): { isValid: boolean; error?: s
 
 export const validateReflection = (reflection: string): { isValid: boolean; error?: string } => {
   if (!reflection.trim()) {
-    return { isValid: false, error: 'Reflection is required' };
+    return { isValid: false, error: MESSAGES.REFLECTION_REQUIRED };
   }
   
-  if (reflection.length > 5000) {
-    return { isValid: false, error: 'Reflection must be less than 5000 characters' };
+  if (reflection.length > VALIDATION.REFLECTION_MAX_LENGTH) {
+    return { isValid: false, error: MESSAGES.REFLECTION_TOO_LONG };
   }
   
   return { isValid: true };

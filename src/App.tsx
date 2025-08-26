@@ -27,10 +27,6 @@ function DailyEntryWrapper() {
   const { projects, isLoading } = useProjects();
   const { projectId } = useParams<{ projectId: string }>();
   
-  console.log('DailyEntryWrapper - projectId:', projectId);
-  console.log('DailyEntryWrapper - projects:', projects);
-  console.log('DailyEntryWrapper - isLoading:', isLoading);
-  
   // Show loading state while projects are being loaded
   if (isLoading) {
     return (
@@ -42,10 +38,7 @@ function DailyEntryWrapper() {
   
   const project = projects.find(p => p.id === projectId);
   
-  console.log('DailyEntryWrapper - found project:', project);
-  
   if (!project) {
-    console.log('DailyEntryWrapper - project not found, redirecting to home');
     return <Navigate to="/" replace />;
   }
   

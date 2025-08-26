@@ -45,7 +45,6 @@ export const ProjectDashboard: React.FC = () => {
     if (window.confirm('Are you sure you want to delete this project? This action cannot be undone.')) {
       try {
         await deleteProject(projectId);
-        console.log('Project deleted successfully');
       } catch (err) {
         console.error('Failed to delete project:', err);
       }

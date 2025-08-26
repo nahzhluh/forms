@@ -53,8 +53,6 @@ export const loadTestData = () => {
 
     // Overwrite storage with test data
     storageService.importData(payload);
-
-    console.log('Test data loaded successfully!');
     return true;
   } catch (error) {
     console.error('Failed to load test data:', error);
