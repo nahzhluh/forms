@@ -18,7 +18,7 @@ describe('ProjectCard', () => {
 
     expect(screen.getByText('Test Project')).toBeInTheDocument();
     expect(screen.getByText(/Created/)).toBeInTheDocument();
-    expect(screen.getByText('Status: Active')).toBeInTheDocument();
+    expect(screen.getByText(/Last updated/)).toBeInTheDocument();
   });
 
   it('calls onClick when clicked', () => {
@@ -55,12 +55,14 @@ describe('ProjectCard', () => {
     expect(mockOnClick).not.toHaveBeenCalled();
   });
 
-  it('shows archived status for inactive projects', () => {
+  it('renders inactive projects without status display', () => {
     const archivedProject = { ...mockProject, isActive: false };
     const mockOnClick = jest.fn();
     
     render(<ProjectCard project={archivedProject} onClick={mockOnClick} />);
 
-    expect(screen.getByText('Status: Archived')).toBeInTheDocument();
+    expect(screen.getByText('Test Project')).toBeInTheDocument();
+    expect(screen.getByText(/Created/)).toBeInTheDocument();
+    expect(screen.getByText(/Last updated/)).toBeInTheDocument();
   });
 });
