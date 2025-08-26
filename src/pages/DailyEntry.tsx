@@ -137,7 +137,6 @@ export const DailyEntry: React.FC<DailyEntryProps> = ({ project }) => {
         }
       }
 
-      showSuccess('Entry saved successfully!');
       
       // Refresh all entries to update the sidebar
       refreshAllEntries();
@@ -153,11 +152,6 @@ export const DailyEntry: React.FC<DailyEntryProps> = ({ project }) => {
       setReflection('');
       clearImages();
       setIsEditing(false);
-      
-      // Hide success message after 3 seconds
-      setTimeout(() => {
-        resetState();
-      }, 3000);
 
     } catch (err) {
       showError(err instanceof Error ? err.message : 'Failed to save entry');
@@ -229,14 +223,6 @@ export const DailyEntry: React.FC<DailyEntryProps> = ({ project }) => {
           </div>
         </div>
 
-        {/* Success Message */}
-        {success && (
-          <Card className="border-green-200 bg-green-50">
-            <CardContent className="pt-6">
-              <p className="text-green-800">Entry saved successfully! Redirecting...</p>
-            </CardContent>
-          </Card>
-        )}
 
         {/* Error Message */}
         {error && (
