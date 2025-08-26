@@ -25,25 +25,12 @@ export const formatDate = (date: string | Date): string => {
   });
 };
 
-export const formatDateShort = (date: string | Date): string => {
-  const d = typeof date === 'string' ? new Date(date) : date;
-  return d.toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-  });
-};
-
 export const getTodayString = (): string => {
   const now = new Date();
   const year = now.getFullYear();
   const month = String(now.getMonth() + 1).padStart(2, '0');
   const day = String(now.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
-};
-
-export const isValidDate = (dateString: string): boolean => {
-  const date = new Date(dateString);
-  return date instanceof Date && !isNaN(date.getTime());
 };
 
 // File utilities
@@ -71,37 +58,6 @@ export const validateImageFile = (file: File): { isValid: boolean; error?: strin
   return { isValid: true };
 };
 
-export const compressImage = async (file: File, maxWidth = 1200): Promise<File> => {
-  return new Promise((resolve) => {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d')!;
-    const img = new Image();
-
-    img.onload = () => {
-      const { width, height } = img;
-      const ratio = Math.min(maxWidth / width, maxWidth / height);
-      
-      canvas.width = width * ratio;
-      canvas.height = height * ratio;
-      
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      
-      canvas.toBlob((blob) => {
-        if (blob) {
-          const compressedFile = new File([blob], file.name, {
-            type: file.type,
-            lastModified: Date.now(),
-          });
-          resolve(compressedFile);
-        } else {
-          resolve(file);
-        }
-      }, file.type, 0.8);
-    };
-
-    img.src = URL.createObjectURL(file);
-  });
-};
 
 // Validation utilities
 export const validateProjectName = (name: string): { isValid: boolean; error?: string } => {
@@ -128,32 +84,7 @@ export const validateReflection = (reflection: string): { isValid: boolean; erro
   return { isValid: true };
 };
 
-// String utilities
-export const truncateText = (text: string, maxLength: number): string => {
-  if (text.length <= maxLength) return text;
-  return text.slice(0, maxLength) + '...';
-};
 
-export const generateSlug = (text: string): string => {
-  return text
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)/g, '');
-};
-
-// Array utilities
-export const sortByDate = <T extends { date?: string; createdAt?: string }>(items: T[], ascending = false): T[] => {
-  return [...items].sort((a, b) => {
-    const dateA = a.date || a.createdAt || '';
-    const dateB = b.date || b.createdAt || '';
-    
-    if (ascending) {
-      return dateA.localeCompare(dateB);
-    } else {
-      return dateB.localeCompare(dateA);
-    }
-  });
-};
 
 // Error handling
 export const handleError = (error: unknown): string => {
@@ -166,22 +97,3 @@ export const handleError = (error: unknown): string => {
   return 'An unexpected error occurred';
 };
 
-// Local storage utilities
-export const isLocalStorageAvailable = (): boolean => {
-  try {
-    const test = '__localStorage_test__';
-    localStorage.setItem(test, test);
-    localStorage.removeItem(test);
-    return true;
-  } catch {
-    return false;
-  }
-};
-
-// Responsive utilities
-export const getBreakpoint = (): 'mobile' | 'tablet' | 'desktop' => {
-  const width = window.innerWidth;
-  if (width < 768) return 'mobile';
-  if (width < 1024) return 'tablet';
-  return 'desktop';
-};

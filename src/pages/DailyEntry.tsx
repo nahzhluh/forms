@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Layout } from '../components/Layout';
 import { Button } from '../components/ui/Button';
 import { Textarea } from '../components/ui/Textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
@@ -9,7 +8,6 @@ import { DateNavigation } from '../components/DateNavigation';
 import { Project, Entry } from '../types';
 import { getTodayString, validateReflection, validateImageFile, convertFileToDataUrl, formatDate } from '../utils';
 import { storageService } from '../storage/localStorage';
-import { useEntries } from '../hooks/useEntries';
 
 interface DailyEntryProps {
   project: Project;
@@ -32,7 +30,6 @@ export const DailyEntry: React.FC<DailyEntryProps> = ({ project }) => {
   const [allEntries, setAllEntries] = useState<Entry[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const today = getTodayString();
   const reflectionPrompt = "Describe what you worked on today. What worked? What frustrated you? What are you curious about?";
 
   // Calculate total images: existing media + new images

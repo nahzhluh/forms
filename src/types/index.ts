@@ -28,27 +28,6 @@ export interface MediaItem {
   createdAt: string;
 }
 
-// Form types for data entry
-export interface CreateProjectForm {
-  name: string;
-}
-
-export interface CreateEntryForm {
-  projectId: string;
-  date: string;
-  reflection: string;
-  media: File[];
-}
-
-// UI state types
-export interface AppState {
-  projects: Project[];
-  currentProject: Project | null;
-  currentEntry: Entry | null;
-  isLoading: boolean;
-  error: string | null;
-}
-
 // Storage types for localStorage
 export interface StorageData {
   projects: Project[];
