@@ -1,10 +1,10 @@
-import { useState, useRef } from 'react';
-import { validateImageFile, convertFileToDataUrl } from '../utils';
+import { useState, useRef, useCallback } from 'react';
+import { validateImageFile } from '../utils';
 import { VALIDATION, MESSAGES } from '../constants';
 
 export interface UseMediaUploadReturn {
   images: File[];
-  fileInputRef: React.RefObject<HTMLInputElement>;
+  fileInputRef: React.RefObject<HTMLInputElement | null>;
   handleImageUpload: (event: React.ChangeEvent<HTMLInputElement>) => void;
   removeImage: (index: number) => void;
   clearImages: () => void;
@@ -22,7 +22,7 @@ export const useMediaUpload = (
   const [images, setImages] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
     const validFiles: File[] = [];
     const errors: string[] = [];
@@ -53,18 +53,18 @@ export const useMediaUpload = (
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
-  };
+  }, [maxImages, existingMediaCount, images.length, onError]);
 
-  const removeImage = (index: number) => {
+  const removeImage = useCallback((index: number) => {
     setImages(prev => prev.filter((_, i) => i !== index));
-  };
+  }, []);
 
-  const clearImages = () => {
+  const clearImages = useCallback(() => {
     setImages([]);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
-  };
+  }, []);
 
   return {
     images,

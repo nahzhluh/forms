@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { Textarea } from '../components/ui/Textarea';
@@ -6,9 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card'
 import { EntryDisplay } from '../components/EntryDisplay';
 import { DateNavigation } from '../components/DateNavigation';
 import { Project, Entry } from '../types';
-import { getTodayString, validateReflection, validateImageFile, convertFileToDataUrl, formatDate } from '../utils';
+import { getTodayString, validateReflection, convertFileToDataUrl, formatDate } from '../utils';
 import { storageService } from '../storage/localStorage';
-import { VALIDATION, UI, MESSAGES } from '../constants';
+import { VALIDATION } from '../constants';
 import { useFormState } from '../hooks/useFormState';
 import { useMediaUpload } from '../hooks/useMediaUpload';
 
@@ -69,7 +69,7 @@ export const DailyEntry: React.FC<DailyEntryProps> = ({ project }) => {
     setIsEditing(false);
     setReflection('');
     clearImages();
-  }, [project.id, selectedDate]);
+  }, [project.id, selectedDate, clearImages]);
 
   // Pre-populate form when editing
   useEffect(() => {
