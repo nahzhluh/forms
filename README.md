@@ -1,6 +1,6 @@
 # Forms - Process Documentation Platform
 
-Forms is a process-focused documentation platform for makers and creators. Document your creative projects through daily reflections and media capture, emphasizing experimentation and learning over polished results.
+Forms is a process-focused documentation platform for makers and creators. Document your creative projects through daily reflections and media capture, emphasizing experimentation and learning over polished results. For more details, see PRD.
 
 ## Features
 
@@ -16,19 +16,6 @@ Forms is a process-focused documentation platform for makers and creators. Docum
 3. **Navigate Timeline**: Use the sidebar to browse past entries
 4. **Auto-save**: Press Cmd+Enter to save quickly
 
-## Development
-
-### Setup
-```bash
-npm install
-npm start
-```
-
-### Testing
-```bash
-npm test
-```
-
 ### Tech Stack
 - React + TypeScript
 - Radix UI + Tailwind CSS
@@ -37,10 +24,5 @@ npm test
 ## Browser Support
 - Chrome, Safari, Firefox, Edge (latest versions)
 
-## Contributing
-- Follow TypeScript and React best practices
-- Write tests for new features
-- Use the established design system
-
 ## License
-[Add license information here]
+- TBD
