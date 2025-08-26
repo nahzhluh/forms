@@ -7,6 +7,7 @@ import { EntryDisplay } from '../components/EntryDisplay';
 import { DateNavigation } from '../components/DateNavigation';
 import { Project, Entry } from '../types';
 import { getTodayString, validateReflection, convertFileToDataUrl, formatDate } from '../utils';
+import { compressImage } from '../utils/imageCompression';
 import { storageService } from '../storage/localStorage';
 import { VALIDATION } from '../constants';
 import { useFormState } from '../hooks/useFormState';
@@ -27,7 +28,7 @@ export const DailyEntry: React.FC<DailyEntryProps> = ({ project }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [selectedDate, setSelectedDate] = useState(getTodayString());
   const [allEntries, setAllEntries] = useState<Entry[]>([]);
-  const { isLoading: isSaving, error, success, setIsLoading: setIsSaving, showError, showSuccess, resetState } = useFormState();
+  const { isLoading: isSaving, error, setIsLoading: setIsSaving, showError } = useFormState();
   const { images, fileInputRef, handleImageUpload, removeImage, clearImages } = useMediaUpload(
     VALIDATION.MAX_IMAGES_PER_ENTRY,
     existingEntry?.media?.length || 0,
@@ -84,22 +85,23 @@ export const DailyEntry: React.FC<DailyEntryProps> = ({ project }) => {
   const handleSave = async () => {
     try {
       setIsSaving(true);
-      resetState();
 
       // Validate reflection
       const reflectionValidation = validateReflection(reflection);
       if (!reflectionValidation.isValid) {
         showError(reflectionValidation.error || '');
+        setIsSaving(false);
         return;
       }
 
-      // Convert images to data URLs
+      // Compress and convert images to data URLs
       const mediaItems = await Promise.all(
         images.map(async (file) => {
-          const dataUrl = await convertFileToDataUrl(file);
+          const compressedFile = await compressImage(file);
+          const dataUrl = await convertFileToDataUrl(compressedFile);
           return {
             fileName: file.name,
-            fileSize: file.size,
+            fileSize: compressedFile.size, // Use compressed size
             mimeType: file.type,
             dataUrl,
           };
@@ -242,34 +244,37 @@ export const DailyEntry: React.FC<DailyEntryProps> = ({ project }) => {
           />
         ) : (
           <>
-            {/* Reflection Input */}
+            {/* Combined Reflection and Media Input */}
             <Card>
               <CardHeader>
                 <CardTitle>
                   {selectedDate === getTodayString() ? 'Today\'s Reflection' : `${formatDate(selectedDate)} Reflection`}
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <Textarea
-                  value={reflection}
-                  onChange={(e) => setReflection(e.target.value)}
-                  placeholder={reflectionPrompt}
-                  className="min-h-[200px] resize-none"
-                  onKeyDown={handleKeyDown}
-                />
-                <p className="text-sm text-neutral-500 mt-2">
-                  Press Cmd+Enter to save
-                </p>
-              </CardContent>
-            </Card>
+              <CardContent className="space-y-4">
+                {/* Text Input */}
+                <div>
+                  <Textarea
+                    value={reflection}
+                    onChange={(e) => setReflection(e.target.value)}
+                    placeholder={reflectionPrompt}
+                    className="min-h-[200px] resize-none"
+                    onKeyDown={handleKeyDown}
+                  />
+                  <p className="text-sm text-neutral-500 mt-2">
+                    Press Cmd+Enter to save
+                  </p>
+                </div>
 
-            {/* Image Upload */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Media</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
+                {/* Media Upload Section */}
+                <div className="space-y-4 border-t pt-4">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-sm font-medium text-neutral-700">Add Images</h4>
+                    <span className="text-xs text-neutral-500">
+                      {totalImages}/{VALIDATION.MAX_IMAGES_PER_ENTRY}
+                    </span>
+                  </div>
+                  
                   {/* Upload Button */}
                   <div>
                     <input
@@ -285,35 +290,77 @@ export const DailyEntry: React.FC<DailyEntryProps> = ({ project }) => {
                       variant="outline"
                       onClick={() => fileInputRef.current?.click()}
                       disabled={totalImages >= VALIDATION.MAX_IMAGES_PER_ENTRY}
+                      size="sm"
                     >
-                      + Add Images ({totalImages}/{VALIDATION.MAX_IMAGES_PER_ENTRY})
+                      + Add Images
                     </Button>
                     <p className="text-sm text-neutral-500 mt-1">
                       Upload up to {VALIDATION.MAX_IMAGES_PER_ENTRY} images (JPEG, PNG, WebP, GIF, max 5MB each)
                     </p>
                   </div>
 
-                  {/* Image Preview Grid */}
+                  {/* Existing Images (when editing) */}
+                  {isEditing && existingEntry?.media && existingEntry.media.length > 0 && (
+                    <div>
+                      <p className="text-sm font-medium text-neutral-600 mb-2">Current Images:</p>
+                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
+                        {existingEntry.media.map((mediaItem) => (
+                          <div key={mediaItem.id} className="relative group">
+                            <img
+                              src={mediaItem.dataUrl}
+                              alt={mediaItem.fileName}
+                              className="w-full h-32 object-cover rounded-lg"
+                            />
+                            <button
+                              onClick={() => {
+                                storageService.deleteMediaItem(mediaItem.id);
+                                // Refresh the entry to update the display
+                                const updatedEntry = storageService.getEntryByDate(project.id, selectedDate);
+                                if (updatedEntry) {
+                                  const media = storageService.getMediaForEntry(updatedEntry.id);
+                                  setExistingEntry({ ...updatedEntry, media });
+                                }
+                              }}
+                              className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm opacity-0 group-hover:opacity-100 transition-opacity"
+                              type="button"
+                            >
+                              ×
+                            </button>
+                            <p className="text-xs text-neutral-500 mt-1 truncate">
+                              {mediaItem.fileName}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* New Images Preview Grid */}
                   {images.length > 0 && (
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                      {images.map((file, index) => (
-                        <div key={index} className="relative group">
-                          <img
-                            src={URL.createObjectURL(file)}
-                            alt={file.name}
-                            className="w-full h-32 object-cover rounded-lg"
-                          />
-                          <button
-                            onClick={() => removeImage(index)}
-                            className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm opacity-0 group-hover:opacity-100 transition-opacity"
-                          >
-                            ×
-                          </button>
-                          <p className="text-xs text-neutral-500 mt-1 truncate">
-                            {file.name}
-                          </p>
-                        </div>
-                      ))}
+                    <div>
+                      <p className="text-sm font-medium text-neutral-600 mb-2">
+                        {isEditing ? 'Additional Images:' : 'New Images:'}
+                      </p>
+                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        {images.map((file, index) => (
+                          <div key={index} className="relative group">
+                            <img
+                              src={URL.createObjectURL(file)}
+                              alt={file.name}
+                              className="w-full h-32 object-cover rounded-lg"
+                            />
+                            <button
+                              onClick={() => removeImage(index)}
+                              className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                              ×
+                            </button>
+                            <p className="text-xs text-neutral-500 mt-1 truncate">
+                              {file.name}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>

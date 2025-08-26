@@ -23,7 +23,7 @@ describe('DailyEntry', () => {
     name: 'Test Project',
     createdAt: '2023-12-25T10:00:00.000Z',
     updatedAt: '2023-12-25T10:00:00.000Z',
-    isArchived: false,
+    isActive: true,
   };
 
   const mockOnBack = jest.fn();
@@ -78,7 +78,8 @@ describe('DailyEntry', () => {
 
       // Wait for the form to be visible
       await waitFor(() => {
-        expect(screen.getByText('+ Add Images (3/5)')).toBeInTheDocument();
+        expect(screen.getByText('+ Add Images')).toBeInTheDocument();
+        expect(screen.getByText('3/5')).toBeInTheDocument();
       });
 
       // Create 3 more image files (this would exceed the 5-image limit)
@@ -127,7 +128,7 @@ describe('DailyEntry', () => {
 
       render(
         <BrowserRouter>
-          <DailyEntry project={mockProject} onBack={mockOnBack} />
+          <DailyEntry project={mockProject} />
         </BrowserRouter>
       );
 
@@ -141,7 +142,8 @@ describe('DailyEntry', () => {
 
       // Wait for the form to be visible
       await waitFor(() => {
-        expect(screen.getByText('+ Add Images (2/5)')).toBeInTheDocument();
+        expect(screen.getByText('+ Add Images')).toBeInTheDocument();
+        expect(screen.getByText('2/5')).toBeInTheDocument();
       });
 
       // Create 3 image files (total would be 5, which is allowed)
@@ -160,7 +162,8 @@ describe('DailyEntry', () => {
 
       // Wait for the count to update
       await waitFor(() => {
-        expect(screen.getByText('+ Add Images (5/5)')).toBeInTheDocument();
+        expect(screen.getByText('+ Add Images')).toBeInTheDocument();
+        expect(screen.getByText('5/5')).toBeInTheDocument();
       });
 
       // Verify no error message appears

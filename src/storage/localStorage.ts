@@ -1,7 +1,7 @@
 import { Project, Entry, MediaItem, StorageData } from '../types';
 
 const STORAGE_KEY = 'forms_data';
-const MAX_STORAGE_SIZE = 10 * 1024 * 1024; // 10MB limit
+const MAX_STORAGE_SIZE = 25 * 1024 * 1024; // 25MB limit - more conservative than browser limits
 
 // Utility functions
 const generateId = (): string => {
@@ -43,14 +43,23 @@ export const storageService = {
     try {
       const jsonData = JSON.stringify(data);
       
-      // Check storage size
+      // Check our application storage size limit
       if (jsonData.length > MAX_STORAGE_SIZE) {
-        throw new Error('Storage limit exceeded. Please remove some media files.');
+        throw new Error(`Storage limit exceeded. Current size: ${(jsonData.length / 1024 / 1024).toFixed(1)}MB. Please remove some media files.`);
       }
       
+      // Try to save to localStorage
       localStorage.setItem(STORAGE_KEY, jsonData);
     } catch (error) {
       console.error('Error saving to localStorage:', error);
+      
+      // Handle browser storage quota errors specifically
+      if (error instanceof DOMException && error.name === 'QuotaExceededError') {
+        // Try to determine actual size
+        const currentSize = (JSON.stringify(data).length / 1024 / 1024).toFixed(1);
+        throw new Error(`Browser storage quota exceeded! Your data (${currentSize}MB) exceeds the browser's localStorage limit. Try using fewer or smaller images, or clear old entries.`);
+      }
+      
       throw error;
     }
   },
@@ -228,6 +237,29 @@ export const storageService = {
   getStorageSize(): number {
     const data = localStorage.getItem(STORAGE_KEY);
     return data ? new Blob([data]).size : 0;
+  },
+
+  getStorageInfo(): { 
+    sizeBytes: number; 
+    sizeMB: string; 
+    maxSizeMB: string; 
+    usagePercent: string;
+    mediaCount: number;
+    projects: number;
+    entries: number;
+  } {
+    const size = this.getStorageSize();
+    const data = this.getAllData();
+    
+    return {
+      sizeBytes: size,
+      sizeMB: (size / 1024 / 1024).toFixed(1),
+      maxSizeMB: (MAX_STORAGE_SIZE / 1024 / 1024).toFixed(0),
+      usagePercent: ((size / MAX_STORAGE_SIZE) * 100).toFixed(1),
+      mediaCount: data.media.length,
+      projects: data.projects.length,
+      entries: data.entries.length,
+    };
   },
 
   clearAllData(): void {
