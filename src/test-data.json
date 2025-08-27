@@ -259,6 +259,195 @@
           "createdAt": "2024-02-02T14:30:00Z"
         }
       ]
+    },
+    {
+      "id": "project-8",
+      "name": "Daily Sketching Challenge",
+      "createdAt": "2023-12-01T08:00:00Z",
+      "entries": [
+        {
+          "id": "entry-8-1",
+          "date": "2023-12-01",
+          "reflection": "Started a 30-day sketching challenge today! I'm nervous about committing to daily practice, but excited to see how my skills develop. Today I sketched a simple coffee mug - nothing fancy, but it felt good to put pencil to paper. I was frustrated with the proportions at first, but reminded myself this is about practice, not perfection.",
+          "media": [],
+          "createdAt": "2023-12-01T09:30:00Z"
+        },
+        {
+          "id": "entry-8-2", 
+          "date": "2023-12-02",
+          "reflection": "Day 2! Sketched my houseplant today. I'm starting to notice how observation is such a key part of drawing. What worked well was taking time to really look at the shapes and shadows before drawing. I was surprised by how much detail I noticed that I normally miss. The leaves have such interesting textures and patterns.",
+          "media": [],
+          "createdAt": "2023-12-02T10:15:00Z"
+        },
+        {
+          "id": "entry-8-3",
+          "date": "2023-12-03", 
+          "reflection": "Tried drawing my hand today - much harder than expected! I was frustrated with how the fingers looked wrong, but I'm learning that hands are notoriously difficult. What worked was breaking it down into basic shapes first. I'm curious about learning more about anatomy to help with figure drawing.",
+          "media": [],
+          "createdAt": "2023-12-03T11:00:00Z"
+        },
+        {
+          "id": "entry-8-4",
+          "date": "2023-12-04",
+          "reflection": "Sketched outdoors today at the park. The changing light was challenging but exciting. I was surprised by how much atmosphere you can capture with just pencil and paper. What worked well was working quickly to capture the overall mood rather than getting caught up in details. The cold made my hands stiff though!",
+          "media": [],
+          "createdAt": "2023-12-04T16:30:00Z"
+        },
+        {
+          "id": "entry-8-5",
+          "date": "2023-12-05",
+          "reflection": "Day 5 - almost a week in! Today I focused on shading techniques. I was curious about how different pencil pressures create different values. What worked well was practicing gradients on scrap paper first. I'm starting to see improvement in how I approach shadows and light. This daily practice is really building confidence.",
+          "media": [],
+          "createdAt": "2023-12-05T14:20:00Z"
+        },
+        {
+          "id": "entry-8-6",
+          "date": "2023-12-06",
+          "reflection": "Attempted a portrait of my cat today - she wouldn't stay still! I was frustrated at first, but then realized this was great practice for capturing movement and working from memory. What worked was doing quick gesture sketches first to get the essence of her poses. I'm learning that drawing is as much about seeing as it is about technique.",
+          "media": [],
+          "createdAt": "2023-12-06T12:45:00Z"
+        },
+        {
+          "id": "entry-8-7",
+          "date": "2023-12-07",
+          "reflection": "Week one complete! Today I sketched some kitchen utensils - simple shapes but good for practicing ellipses and perspective. I was surprised by how much I've learned about looking at objects differently. What worked well was setting up good lighting to create clear shadows. I'm excited about week two!",
+          "media": [],
+          "createdAt": "2023-12-07T15:10:00Z"
+        },
+        {
+          "id": "entry-8-8",
+          "date": "2023-12-08",
+          "reflection": "Starting week two with more confidence. Today I drew a street scene from my window. I was curious about how to suggest distance and depth with line weight. What worked was making closer objects darker and more detailed. I'm frustrated that buildings are hard to get straight, but I'm seeing progress in my line control.",
+          "media": [],
+          "createdAt": "2023-12-08T10:30:00Z"
+        },
+        {
+          "id": "entry-8-9",
+          "date": "2023-12-09",
+          "reflection": "Experimented with different mark-making today. I tried crosshatching, stippling, and different line qualities. What worked well was discovering that varying my approach keeps the sketching interesting. I was surprised by how much texture you can create with simple marks. This is becoming less about perfection and more about exploration.",
+          "media": [],
+          "createdAt": "2023-12-09T13:15:00Z"
+        },
+        {
+          "id": "entry-8-10",
+          "date": "2023-12-10",
+          "reflection": "Double digits! Drew flowers today - roses from the grocery store. I was frustrated with how complex the petal structures are, but excited about the challenge. What worked was starting with the overall shape and working inward. I'm learning that every subject teaches you something different about seeing and drawing.",
+          "media": [],
+          "createdAt": "2023-12-10T11:40:00Z"
+        },
+        {
+          "id": "entry-8-11", 
+          "date": "2023-12-11",
+          "reflection": "Sketched people at a coffee shop today - very quick gesture drawings since people move constantly. I was nervous about drawing strangers but excited about the challenge. What worked was focusing on the energy and movement rather than likeness. I'm building confidence in drawing from life and working quickly.",
+          "media": [],
+          "createdAt": "2023-12-11T16:20:00Z"
+        },
+        {
+          "id": "entry-8-12",
+          "date": "2023-12-12", 
+          "reflection": "Tried drawing with my non-dominant hand today - what an experiment! I was frustrated by how clumsy it felt, but curious about how it might loosen up my approach. What worked was that it forced me to focus on observation rather than muscle memory. It's fascinating how changing tools or methods can shift your perspective on the whole process.",
+          "media": [],
+          "createdAt": "2023-12-12T14:50:00Z"
+        }
+      ]
+    },
+    {
+      "id": "project-9", 
+      "name": "Learning Guitar",
+      "createdAt": "2023-11-15T18:00:00Z",
+      "entries": [
+        {
+          "id": "entry-9-1",
+          "date": "2023-11-15",
+          "reflection": "First day with my new guitar! I'm excited but intimidated. My fingers hurt from pressing the strings and I can barely play a C chord cleanly. What worked well was the online tutorial I found - the instructor explains things clearly. I'm frustrated that everything feels so awkward, but I know this is normal for beginners. Just need to be patient with myself.",
+          "media": [],
+          "createdAt": "2023-11-15T19:30:00Z"
+        },
+        {
+          "id": "entry-9-2",
+          "date": "2023-11-16", 
+          "reflection": "Day 2 of guitar practice. My fingertips are still sore but I'm getting better at holding the pick. Worked on switching between G and C chords today - so much harder than it looks! What worked was practicing the chord changes slowly and repeatedly. I'm curious about when this will start feeling more natural.",
+          "media": [],
+          "createdAt": "2023-11-16T20:00:00Z"
+        },
+        {
+          "id": "entry-9-3",
+          "date": "2023-11-18",
+          "reflection": "Skipped yesterday but got back to it today. Added D chord to my practice. Three chords felt overwhelming at first, but I'm starting to see how they connect to make songs. What worked well was using a metronome to keep steady timing. I was surprised by how much rhythm matters - it's not just about the chords themselves.",
+          "media": [],
+          "createdAt": "2023-11-18T19:15:00Z"
+        },
+        {
+          "id": "entry-9-4", 
+          "date": "2023-11-20",
+          "reflection": "First time trying to play along with a simple song - 'Wonderwall' with just G, C, and D. I was frustrated that I couldn't keep up with the tempo, but excited when I played a few measures cleanly. What worked was slowing the song down and focusing on clean chord changes rather than speed. Progress feels slow but I can sense improvement.",
+          "media": [],
+          "createdAt": "2023-11-20T18:45:00Z"
+        },
+        {
+          "id": "entry-9-5",
+          "date": "2023-11-22",
+          "reflection": "Learning my first strumming pattern today - down, down-up, up-down-up. My right hand feels so clumsy! I was frustrated with the coordination between fretting and strumming, but I can see how strumming patterns bring songs to life. What worked was practicing just the strumming without worrying about chord changes first.",
+          "media": [],
+          "createdAt": "2023-11-22T17:30:00Z"
+        },
+        {
+          "id": "entry-9-6",
+          "date": "2023-11-24",
+          "reflection": "Tried playing 'Horse with No Name' today - only two chords! It felt amazing to play something that actually sounded like the song. What worked well was having a song with just Em and D - I could focus on strumming and rhythm. I'm curious about learning songs that use the chords I already know rather than always learning new chords.",
+          "media": [],
+          "createdAt": "2023-11-24T20:10:00Z"
+        },
+        {
+          "id": "entry-9-7",
+          "date": "2023-11-26",
+          "reflection": "Week 2 of guitar! Added A minor to my repertoire. It's interesting how Am uses some of the same finger positions as C. I was surprised by how much easier it is to remember chord shapes when you understand the patterns. What worked was practicing chord progressions like Am-C-G-D. My fingers are finally starting to build calluses.",
+          "media": [],
+          "createdAt": "2023-11-26T19:00:00Z"
+        },
+        {
+          "id": "entry-9-8",
+          "date": "2023-11-28",
+          "reflection": "Learned about barre chords today - holy cow, they're hard! I can barely get the F chord to ring out cleanly. I was frustrated but also excited about the challenge. What worked was just pressing the barre without worrying about the other fingers first. I can see this is going to take a lot of practice, but it opens up so many more songs.",
+          "media": [],
+          "createdAt": "2023-11-28T18:20:00Z"
+        },
+        {
+          "id": "entry-9-9",
+          "date": "2023-11-30", 
+          "reflection": "Two weeks in! Worked on basic fingerpicking today - 'House of the Rising Sun' pattern. It's like learning coordination all over again. I was frustrated with how slowly I had to go, but curious about how fingerpicking creates such a different feel than strumming. What worked was isolating just the thumb pattern first.",
+          "media": [],
+          "createdAt": "2023-11-30T21:00:00Z"
+        },
+        {
+          "id": "entry-9-10",
+          "date": "2023-12-02",
+          "reflection": "Played my first complete song today - a simple version of 'Mad World' with just Em, C, G, D. It felt incredible! I was excited about how the chords create the emotional tone of the song. What worked well was finding a song that matched my current skill level. I'm starting to understand how chord progressions create feelings.",
+          "media": [],
+          "createdAt": "2023-12-02T19:45:00Z"
+        },
+        {
+          "id": "entry-9-11",
+          "date": "2023-12-04",
+          "reflection": "Worked on rhythm guitar today - learning to 'chop' chords for a percussive effect. I was surprised by how much this adds to the groove. What worked was practicing with a drum backing track. I'm frustrated that my timing still isn't perfect, but I can feel myself becoming more musical rather than just technical. The guitar is starting to feel less foreign in my hands.",
+          "media": [],
+          "createdAt": "2023-12-04T20:30:00Z"
+        },
+        {
+          "id": "entry-9-12",
+          "date": "2023-12-06",
+          "reflection": "Three weeks of guitar practice! Today I tried writing my own simple chord progression - just Am-F-C-G. I was excited about creating something original, even if it's basic. What worked well was playing around with different strumming patterns over the same chords. I'm curious about how melody fits with chords and how to start writing actual songs.",
+          "media": [],
+          "createdAt": "2023-12-06T18:00:00Z"
+        },
+        {
+          "id": "entry-9-13",
+          "date": "2023-12-08",
+          "reflection": "Finally getting the hang of quick chord changes! Practiced G-C-D transitions until they became somewhat automatic. I was surprised by how much muscle memory has developed. What worked was focusing on finger placement efficiency - finding the shortest path between chords. I'm building confidence and can almost play along with some of my favorite songs now.",
+          "media": [],
+          "createdAt": "2023-12-08T17:15:00Z"
+        }
+      ]
     }
   ]
 }
