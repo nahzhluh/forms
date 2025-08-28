@@ -5,6 +5,7 @@ import { Textarea } from '../components/ui/Textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
 import { EntryDisplay } from '../components/EntryDisplay';
 import { DateNavigation } from '../components/DateNavigation';
+import { ProjectSummary } from '../components/ProjectSummary';
 import { Project, Entry } from '../types';
 import { getTodayString, validateReflection, convertFileToDataUrl, formatDate } from '../utils';
 import { compressImage } from '../utils/imageCompression';
@@ -225,6 +226,13 @@ export const DailyEntry: React.FC<DailyEntryProps> = ({ project }) => {
           </div>
         </div>
 
+        {/* Project Summary - only show on today's date */}
+        {selectedDate === getTodayString() && (
+          <ProjectSummary 
+            projectId={project.id}
+            onSummaryGenerated={() => {}}
+          />
+        )}
 
         {/* Error Message */}
         {error && (

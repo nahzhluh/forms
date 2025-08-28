@@ -7,11 +7,28 @@ import { Button } from '../components/ui/Button';
 import { useProjects } from '../hooks/useProjects';
 import { Project } from '../types';
 import { loadTestData } from '../utils/loadTestData';
+import { summaryService } from '../services/summaryService';
 
 export const ProjectDashboard: React.FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const navigate = useNavigate();
   const { projects, isLoading, error, createProject, refreshProjects, deleteProject } = useProjects();
+
+  // Pre-generate summaries when projects are loaded (only once per session)
+  const [hasStartedPreGeneration, setHasStartedPreGeneration] = React.useState(false);
+  
+  React.useEffect(() => {
+    if (!isLoading && projects.length > 0 && !hasStartedPreGeneration) {
+      console.log('ProjectDashboard: Starting background summary generation');
+      setHasStartedPreGeneration(true);
+      
+      // Run in background without blocking UI
+      summaryService.preGenerateAllSummaries().catch(error => {
+        console.warn('ProjectDashboard: Background summary generation failed:', error);
+        setHasStartedPreGeneration(false); // Allow retry on failure
+      });
+    }
+  }, [projects, isLoading, hasStartedPreGeneration]);
 
 
   const handleCreateProject = async (name: string) => {

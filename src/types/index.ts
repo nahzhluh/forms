@@ -28,10 +28,19 @@ export interface MediaItem {
   createdAt: string;
 }
 
+// Summary types for project summaries
+export interface ProjectSummary {
+  projectId: string;
+  summary: string;
+  lastUpdated: string;
+  entriesHash: string; // Hash of all entry IDs + updatedAt to detect changes
+}
+
 // Storage types for localStorage
 export interface StorageData {
   projects: Project[];
   entries: Entry[];
   media: MediaItem[];
+  summaries: ProjectSummary[];
   lastSync: string;
 }

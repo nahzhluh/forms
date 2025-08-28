@@ -331,7 +331,67 @@ This MVP establishes the foundation for authentic creative process documentation
 - [x] Test responsive sidebar layout
 - [x] Verify read-only entry display
 
-### Phase 5: Polish & Testing
+### Phase 5: Claude Summary for Projects
+**Goal**: Use Claude API to summarize each project
+
+#### Features
+- [x] Project summary generation using Claude API
+- [x] Display 1-sentence summaries above today's entry section (italicized, visually differentiated)
+- [x] Summary generation on project dashboard load with background pre-generation
+- [x] Debounced summary updates when entries are added/modified
+- [x] Summary caching to avoid unnecessary API calls
+- [x] Graceful fallback when API is unavailable (no summary display)
+
+#### Technical Implementation
+- [x] Integrate Claude API via secure Express.js backend service (API key not exposed)
+- [x] Create project summary service with debounced updates (500ms delay)
+- [x] Implement natural prompt engineering (encouraging, supportive tone)
+- [x] Add error handling for API failures (silent fallback, no summary display)
+- [x] Extend existing localStorage StorageData structure with summaries field
+- [x] Implement summary caching with entry hash-based invalidation
+- [x] Add loading states for summary generation with polling mechanism
+- [x] Handle API rate limiting and failures gracefully with staggered requests
+- [x] Display summaries above today's entry section with subtle styling
+- [x] Generate summaries from all project entries (full project history)
+- [x] Background pre-generation to ensure summaries ready when users navigate
+- [x] Storage event listeners for cross-tab summary updates
+
+#### Deliverables
+- [x] Users see encouraging, insightful 1-sentence summaries above today's entry section
+- [x] Summaries feel natural and encouraging (supportive but neutral tone)
+- [x] Reliable API integration with proper error handling and silent fallback
+- [x] Summary updates automatically when project content changes (debounced)
+- [x] Efficient caching prevents unnecessary API calls
+- [x] Secure backend architecture protects API keys from public exposure
+
+#### Testing Strategy
+- [x] Unit tests for summary generation logic
+- [x] Integration tests for Claude API communication (mocked)
+- [x] Test prompt consistency and tone across different project types
+- [x] Verify caching behavior and cache invalidation
+- [x] Test error handling and fallback states
+- [x] Validate summary quality with different project content volumes
+
+#### Questions & Decisions Made
+- [x] **API Key Management**: Secure backend service with environment variable (ANTHROPIC_API_KEY)
+- [x] **Summary Timing**: Background pre-generation on dashboard load + debounced updates (500ms)
+- [x] **Content Selection**: Use all project entries for MVP (full project history)
+- [x] **Prompt Engineering**: Encouraging, supportive but neutral tone (1 sentence)
+- [x] **Fallback Behavior**: Silent fallback - hide summaries entirely when API fails
+- [x] **Rate Limiting**: Handle gracefully with staggered requests and error handling
+- [x] **Privacy Considerations**: Opt-in functionality for MVP (hasn't shipped yet)
+- [x] **Caching Strategy**: Extend existing localStorage with summaries field + hash invalidation
+- [x] **Display Location**: Above today's entry section, subtle styling
+- [x] **Security Architecture**: Backend API service to protect API keys from frontend exposure
+
+#### Future Considerations
+- [ ] **User-provided API keys**: Allow users to provide their own Claude API keys
+- [ ] **API Cost Management**: Usage tracking, cost warnings, and user billing
+- [ ] **Smart Content Selection**: Cache old entry summaries, combine with recent entries for efficiency
+- [ ] **Privacy Controls**: Explicit opt-in/opt-out mechanisms for shipped product
+- [ ] **Advanced Caching**: Intelligent content selection for large projects
+
+### Phase 6: Polish & Testing
 **Goal**: Refine user experience and ensure quality
 
 #### UI/UX Polish
@@ -365,7 +425,8 @@ This MVP establishes the foundation for authentic creative process documentation
 - **Phase 2**: Users can create and manage projects
 - **Phase 3**: Users can create daily entries with media
 - **Phase 4**: Users can view and navigate past entries
-- **Phase 5**: MVP is polished and ready for launch
+- **Phase 5**: Project summaries provide encouraging insights and work reliably
+- **Phase 6**: MVP is polished and ready for launch
 
 ## Questions & Decisions Needed
 

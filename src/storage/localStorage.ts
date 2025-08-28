@@ -1,4 +1,4 @@
-import { Project, Entry, MediaItem, StorageData } from '../types';
+import { Project, Entry, MediaItem, StorageData, ProjectSummary } from '../types';
 
 const STORAGE_KEY = 'forms_data';
 const MAX_STORAGE_SIZE = 25 * 1024 * 1024; // 25MB limit - more conservative than browser limits
@@ -21,6 +21,7 @@ export const storageService = {
         projects: [],
         entries: [],
         media: [],
+        summaries: [],
         lastSync: getCurrentTimestamp(),
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(initialData));
@@ -31,10 +32,21 @@ export const storageService = {
   getAllData(): StorageData {
     try {
       const data = localStorage.getItem(STORAGE_KEY);
-      return data ? JSON.parse(data) : { projects: [], entries: [], media: [], lastSync: getCurrentTimestamp() };
+      if (data) {
+        const parsed = JSON.parse(data);
+        // Ensure summaries field exists for backward compatibility
+        return {
+          projects: parsed.projects || [],
+          entries: parsed.entries || [],
+          media: parsed.media || [],
+          summaries: parsed.summaries || [],
+          lastSync: parsed.lastSync || getCurrentTimestamp(),
+        };
+      }
+      return { projects: [], entries: [], media: [], summaries: [], lastSync: getCurrentTimestamp() };
     } catch (error) {
       console.error('Error reading from localStorage:', error);
-      return { projects: [], entries: [], media: [], lastSync: getCurrentTimestamp() };
+      return { projects: [], entries: [], media: [], summaries: [], lastSync: getCurrentTimestamp() };
     }
   },
 
@@ -106,13 +118,14 @@ export const storageService = {
     
     if (projectIndex === -1) return false;
     
-    // Remove project and all associated entries and media
+    // Remove project and all associated entries, media, and summaries
     data.projects.splice(projectIndex, 1);
     data.entries = data.entries.filter(e => e.projectId !== id);
     data.media = data.media.filter(m => {
       const entry = data.entries.find(e => e.id === m.entryId);
       return entry && entry.projectId !== id;
     });
+    data.summaries = data.summaries.filter(s => s.projectId !== id);
     
     this.saveAllData(data);
     return true;
@@ -272,5 +285,70 @@ export const storageService = {
 
   importData(data: StorageData): void {
     this.saveAllData(data);
+  },
+
+  // Summary operations
+  getSummary(projectId: string): ProjectSummary | null {
+    const data = this.getAllData();
+    // Handle case where summaries might not exist in old data
+    if (!data.summaries) {
+      return null;
+    }
+    return data.summaries.find(s => s.projectId === projectId) || null;
+  },
+
+  saveSummary(summary: ProjectSummary): void {
+    const data = this.getAllData();
+    // Ensure summaries array exists
+    if (!data.summaries) {
+      data.summaries = [];
+    }
+    
+    const existingIndex = data.summaries.findIndex(s => s.projectId === summary.projectId);
+    
+    if (existingIndex !== -1) {
+      data.summaries[existingIndex] = summary;
+    } else {
+      data.summaries.push(summary);
+    }
+    
+    this.saveAllData(data);
+  },
+
+  deleteSummary(projectId: string): boolean {
+    const data = this.getAllData();
+    // Handle case where summaries might not exist
+    if (!data.summaries) {
+      return false;
+    }
+    
+    const initialLength = data.summaries.length;
+    data.summaries = data.summaries.filter(s => s.projectId !== projectId);
+    
+    if (data.summaries.length < initialLength) {
+      this.saveAllData(data);
+      return true;
+    }
+    
+    return false;
+  },
+
+  // Generate hash for detecting entry changes
+  generateEntriesHash(projectId: string): string {
+    const entries = this.getEntries(projectId);
+    const hashString = entries
+      .map(entry => `${entry.id}:${entry.updatedAt}`)
+      .sort()
+      .join('|');
+    
+    // Simple hash function (for localStorage, this is sufficient)
+    let hash = 0;
+    for (let i = 0; i < hashString.length; i++) {
+      const char = hashString.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32bit integer
+    }
+    
+    return hash.toString();
   },
 };

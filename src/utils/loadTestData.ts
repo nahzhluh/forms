@@ -48,6 +48,7 @@ export const loadTestData = () => {
       projects,
       entries,
       media,
+      summaries: [], // Empty summaries when loading test data
       lastSync: new Date().toISOString(),
     };
 

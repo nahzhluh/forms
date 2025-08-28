@@ -7,15 +7,22 @@ Forms is a process-focused documentation platform for makers and creators. Docum
 - **Project Management**: Create and manage multiple creative projects
 - **Daily Entries**: Write reflections and upload images (up to 5 per entry)
 - **Timeline Navigation**: Browse past entries with an intuitive sidebar
+- **AI Project Summaries**: Claude AI generates encouraging one-sentence summaries of your creative progress
 - **Smart Image Storage**: Automatic image compression (up to 94% size reduction) for efficient storage
 - **Data Persistence**: All data stored locally in your browser (up to 25MB capacity)
 
 ## Quick Start
 
+### Frontend Setup
 1. **Create a Project**: Click "+ New Project" and enter a name
 2. **Write Daily Entries**: Add reflections and upload images (JPEG, PNG, WebP, GIF)
 3. **Navigate Timeline**: Use the sidebar to browse past entries
 4. **Auto-save**: Press Cmd+Enter to save quickly
+
+### AI Summaries Setup (Optional)
+1. **Start Backend**: Run `cd server && npm install && npm start` 
+2. **Configure API Key**: Set `ANTHROPIC_API_KEY` in server/.env
+3. **Enjoy Summaries**: AI-generated project summaries appear automatically above today's entries
 
 ## Image Management
 
@@ -26,6 +33,8 @@ Forms is a process-focused documentation platform for makers and creators. Docum
 
 ## Tech Stack
 - **Frontend**: React + TypeScript
+- **Backend**: Express.js server for AI integration
+- **AI Integration**: Claude API for project summarization
 - **UI Components**: Radix UI + Tailwind CSS
 - **Storage**: Browser localStorage with automatic image compression
 - **Image Processing**: HTML5 Canvas API for client-side compression

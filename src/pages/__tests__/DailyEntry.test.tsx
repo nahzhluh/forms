@@ -14,6 +14,21 @@ jest.mock('../../storage/localStorage', () => ({
     updateEntry: jest.fn(),
     saveMediaItem: jest.fn(),
     getEntries: jest.fn(),
+    getSummary: jest.fn(),
+    saveSummary: jest.fn(),
+    deleteSummary: jest.fn(),
+    generateEntriesHash: jest.fn(),
+    getProjects: jest.fn(),
+  },
+}));
+
+// Mock the summary service
+jest.mock('../../services/summaryService', () => ({
+  summaryService: {
+    getCachedSummary: jest.fn(() => null),
+    generateSummaryImmediate: jest.fn(() => Promise.resolve(null)),
+    isGenerating: jest.fn(() => false),
+    cancelGeneration: jest.fn(),
   },
 }));
 
